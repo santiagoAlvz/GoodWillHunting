@@ -18,6 +18,31 @@ void FinalTree::calculate(){
             edgesCount[i][j]++;
         }
     }
+
+    arrangements[n].resize(1);
+    for(unsigned long i = 1; i <= edgesCount[0][0]; i++){
+        arrangements[n].back().push_back(make_pair(0,i));
+    }
+
+    vector<unsigned> usedEdges;
+
+    for(unsigned long i = 1; i < edgesCount.size(); i++){
+        usedEdges = vector<unsigned>(edgesCount[i].size(),0);
+        if(edgesCount[i].size() == 2){
+            usedEdges[0] = 1;
+            usedEdges[1] = 1;
+            arrangements[n].push_back(arrangements[2][0]);
+            while(arrangements[n].back().size() < n - 1){
+                if(edgesCount[i][0] > usedEdges[0]){
+                    arrangements[n].back().push_back(make_pair(0, arrangements[n].back().size() + 1));
+                    usedEdges[0]++;
+                } else {
+                    arrangements[n].back().push_back(make_pair(1, arrangements[n].back().size() + 1));
+                    usedEdges[1]++;
+                }
+            }
+        }
+    }
 }
 
 void FinalTree::generateEdgesCount(unsigned remaining, unsigned max){
@@ -35,7 +60,12 @@ void FinalTree::generateEdgesCount(unsigned remaining, unsigned max){
                 edgesCount.back().push_back(i);
             }
         } else if ( remaining - i > 1) {
-            edgesCount.push_back(edgesCount[lastPos]);
+            if(lastPos < 0){
+                edgesCount.resize(edgesCount.size() + 1);
+            } else {
+                edgesCount.push_back(edgesCount[lastPos]);
+            }
+
             edgesCount.back().push_back(i);
             generateEdgesCount(remaining - i, i);
         }
@@ -56,10 +86,11 @@ void FinalTree::printArrangements(){
         }
     }
 
-    /*for(unsigned long i = 0; i < edgesCount.size(); i++){
+    cout<<endl;
+    for(unsigned long i = 0; i < edgesCount.size(); i++){
         for(unsigned long j = 0; j < edgesCount[i].size(); j++){
             cout<<edgesCount[i][j]<<",";
         }
         cout<<endl;
-    }*/
+    }
 }
