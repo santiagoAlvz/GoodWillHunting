@@ -4,6 +4,7 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include "TreeMaker.hpp"
 
 using std::vector;
 using std::pair;
@@ -16,6 +17,7 @@ class FinalTree{
 		unsigned n;
 		vector<vector<vector<pair<int,int>>>> arrangements;
 		vector<vector<unsigned>> edgesCount;
+		TreeMaker treeMaker;
 	public:
 		FinalTree(unsigned);
 		void calculate();

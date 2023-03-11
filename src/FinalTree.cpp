@@ -6,6 +6,8 @@ FinalTree::FinalTree(unsigned a){
 
     arrangements[2].resize(1);
     arrangements[2][0].push_back(std::make_pair(0,1));
+
+    treeMaker = TreeMaker(&arrangements);
 }
 
 void FinalTree::calculate(){
@@ -40,6 +42,11 @@ void FinalTree::calculate(){
                     arrangements[n].back().push_back(make_pair(1, arrangements[n].back().size() + 1));
                     usedEdges[1]++;
                 }
+            }
+        } else {
+            if(arrangements[edgesCount[i].size()].empty()){
+                //Create the arrangements for its size
+                treeMaker.createArrangements(edgesCount[i].size());
             }
         }
     }
