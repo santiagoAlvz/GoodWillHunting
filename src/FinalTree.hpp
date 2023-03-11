@@ -14,9 +14,11 @@ class FinalTree{
 	private:
 		unsigned n;
 		vector<vector<vector<pair<int,int>>>> arrangements;
+		vector<vector<unsigned>> edgesCount;
 	public:
 		FinalTree(unsigned);
 		void calculate();
+		void generateEdgesCount(unsigned, unsigned);
 		void printArrangements();
 };
 
