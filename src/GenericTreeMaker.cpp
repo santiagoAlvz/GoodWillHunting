@@ -33,6 +33,11 @@ void GenericTreeMaker::createArrangements(unsigned n){
             continue;
         }
 
+        if((*arrangements)[decomposedEdgeCount[i].size()].empty()){
+            //Create the (*arrangements) for its size
+            createMissingArrangements(decomposedEdgeCount[i].size());
+        }
+
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
             usedBranches.clear();
             std::sort(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end());

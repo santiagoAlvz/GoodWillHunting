@@ -12,6 +12,7 @@ class TreeMaker: public GenericTreeMaker{
 	public:
 		using GenericTreeMaker::GenericTreeMaker;
 		void decompose(unsigned, unsigned);
+		void createMissingArrangements(unsigned);
 };
 
 #endif

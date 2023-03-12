@@ -5,6 +5,7 @@
 #include <utility>
 #include <iostream>
 #include "TreeMaker.hpp"
+#include "GenericTreeMaker.hpp"
 
 using std::vector;
 using std::pair;
@@ -12,17 +13,13 @@ using std::make_pair;
 using std::cout;
 using std::endl;
 
-class FinalTree{
+class FinalTree: public GenericTreeMaker{
 	private:
-		unsigned n;
-		ArrangementsTable *arrangements;
-		vector<vector<unsigned>> edgesCount;
 		TreeMaker treeMaker;
 	public:
-		FinalTree(unsigned, ArrangementsTable *);
-		void calculate();
-		void generateEdgesCount(unsigned, unsigned);
-		void printArrangements();
+		FinalTree(ArrangementsTable *);
+		void decompose(unsigned, unsigned);
+		void createMissingArrangements(unsigned);
 };
 
 #endif

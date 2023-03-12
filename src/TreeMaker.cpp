@@ -34,3 +34,7 @@ void TreeMaker::decompose(unsigned remaining, unsigned max){
 
     if(lastPos >= 0) decomposedEdgeCount.erase(decomposedEdgeCount.begin() + lastPos);
 }
+
+void TreeMaker::createMissingArrangements(unsigned n){
+    cout<<"Error. Missing arrangements for trees with n="<<n<<endl;
+}

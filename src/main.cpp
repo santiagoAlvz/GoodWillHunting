@@ -5,8 +5,8 @@
 
 int main() {
     ArrangementsTable arrangements(N);
-	FinalTree tree(N, &arrangements);
-	tree.calculate();
+	FinalTree tree(&arrangements);
+	tree.createArrangements(N);
 	//tree.printArrangements();
 	arrangements.print();
 

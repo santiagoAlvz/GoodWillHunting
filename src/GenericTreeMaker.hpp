@@ -25,6 +25,7 @@ class GenericTreeMaker{
 		bool isUnique(vector<pair<unsigned,unsigned>>);
 		vector<unsigned> measureBranches(vector<vector<unsigned int>> &, unsigned, int);
 		virtual void decompose(unsigned, unsigned) = 0;
+		virtual void createMissingArrangements(unsigned) = 0;
 };
 
 #endif
