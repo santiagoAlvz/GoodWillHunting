@@ -4,9 +4,11 @@
 #define N 10
 
 int main() {
-	FinalTree tree(N);
+    ArrangementsTable arrangements(N);
+	FinalTree tree(N, &arrangements);
 	tree.calculate();
-	tree.printArrangements();
+	//tree.printArrangements();
+	arrangements.print();
 
 	return 0;
 }

@@ -1,13 +1,10 @@
 #include "FinalTree.hpp"
 
-FinalTree::FinalTree(unsigned a){
+FinalTree::FinalTree(unsigned a, ArrangementsTable *arr){
+    arrangements = arr;
+
+    treeMaker = TreeMaker(arr);
     n = a;
-    arrangements.resize(n + 1);
-
-    arrangements[2].resize(1);
-    arrangements[2][0].push_back(std::make_pair(0,1));
-
-    treeMaker = TreeMaker(&arrangements);
 }
 
 void FinalTree::calculate(){
@@ -21,9 +18,9 @@ void FinalTree::calculate(){
         }
     }
 
-    arrangements[n].resize(1);
+    (*arrangements)[n].resize(1);
     for(unsigned long i = 1; i <= edgesCount[0][0]; i++){
-        arrangements[n].back().push_back(make_pair(0,i));
+        (*arrangements)[n].back().push_back(make_pair(0,i));
     }
 
     vector<unsigned> usedEdges;
@@ -33,19 +30,19 @@ void FinalTree::calculate(){
         if(edgesCount[i].size() == 2){
             usedEdges[0] = 1;
             usedEdges[1] = 1;
-            arrangements[n].push_back(arrangements[2][0]);
-            while(arrangements[n].back().size() < n - 1){
+            (*arrangements)[n].push_back((*arrangements)[2][0]);
+            while((*arrangements)[n].back().size() < n - 1){
                 if(edgesCount[i][0] > usedEdges[0]){
-                    arrangements[n].back().push_back(make_pair(0, arrangements[n].back().size() + 1));
+                    (*arrangements)[n].back().push_back(make_pair(0, (*arrangements)[n].back().size() + 1));
                     usedEdges[0]++;
                 } else {
-                    arrangements[n].back().push_back(make_pair(1, arrangements[n].back().size() + 1));
+                    (*arrangements)[n].back().push_back(make_pair(1, (*arrangements)[n].back().size() + 1));
                     usedEdges[1]++;
                 }
             }
         } else {
-            if(arrangements[edgesCount[i].size()].empty()){
-                //Create the arrangements for its size
+            if((*arrangements)[edgesCount[i].size()].empty()){
+                //Create the (*arrangements) for its size
                 treeMaker.createArrangements(edgesCount[i].size());
             }
         }
@@ -79,25 +76,4 @@ void FinalTree::generateEdgesCount(unsigned remaining, unsigned max){
     }
 
     if(lastPos >= 0) edgesCount.erase(edgesCount.begin() + lastPos);
-}
-
-void FinalTree::printArrangements(){
-    for(unsigned long i = 1; i < n + 1; i++){
-        cout<<i<<":"<<endl;
-        for(unsigned long j = 0; j < arrangements[i].size(); j++){
-            cout<<"\t";
-            for(unsigned long k = 0; k < arrangements[i][j].size(); k++){
-                cout<<"["<<arrangements[i][j][k].first<<","<<arrangements[i][j][k].second<<"] ";
-            }
-            cout<<endl;
-        }
-    }
-
-    cout<<endl;
-    for(unsigned long i = 0; i < edgesCount.size(); i++){
-        for(unsigned long j = 0; j < edgesCount[i].size(); j++){
-            cout<<edgesCount[i][j]<<",";
-        }
-        cout<<endl;
-    }
 }

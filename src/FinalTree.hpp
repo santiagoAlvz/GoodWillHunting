@@ -15,11 +15,11 @@ using std::endl;
 class FinalTree{
 	private:
 		unsigned n;
-		vector<vector<vector<pair<unsigned,unsigned>>>> arrangements;
+		ArrangementsTable *arrangements;
 		vector<vector<unsigned>> edgesCount;
 		TreeMaker treeMaker;
 	public:
-		FinalTree(unsigned);
+		FinalTree(unsigned, ArrangementsTable *);
 		void calculate();
 		void generateEdgesCount(unsigned, unsigned);
 		void printArrangements();
