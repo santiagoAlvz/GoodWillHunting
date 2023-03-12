@@ -15,7 +15,7 @@ using std::endl;
 class FinalTree{
 	private:
 		unsigned n;
-		vector<vector<vector<pair<int,int>>>> arrangements;
+		vector<vector<vector<pair<unsigned,unsigned>>>> arrangements;
 		vector<vector<unsigned>> edgesCount;
 		TreeMaker treeMaker;
 	public:
