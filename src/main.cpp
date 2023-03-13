@@ -1,6 +1,9 @@
 #include <iostream>
 #include "FinalTree.hpp"
 
+using std::cout;
+using std::endl;
+
 #define N 10
 
 int main() {
@@ -8,7 +11,7 @@ int main() {
 	FinalTree tree(&arrangements);
 	tree.createArrangements(N);
 	//tree.printArrangements();
-	arrangements.print();
+	cout<<arrangements<<endl;
 
 	return 0;
 }
