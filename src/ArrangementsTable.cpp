@@ -7,3 +7,16 @@ ArrangementsTable::ArrangementsTable(unsigned n){
     (*this)[2].resize(1);
     (*this)[2][0].first.push_back(std::make_pair(0,1));
 }
+
+void ArrangementsTable::printToFile(string filename, unsigned n){
+    TreeFile file(filename);
+
+    for(unsigned long i = 0; i < (*this)[n].size(); i++){
+        file.newTree(n);
+        for(unsigned long j = 0; j < (*this)[n][i].first.size(); j++){
+            file.addEdge((*this)[n][i].first[j]);
+        }
+    }
+
+    file.close();
+}

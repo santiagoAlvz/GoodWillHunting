@@ -12,6 +12,7 @@ int main() {
 	tree.createArrangements(N);
 	//tree.printArrangements();
 	cout<<arrangements<<endl;
+	arrangements.printToFile("output",N);
 
 	return 0;
 }

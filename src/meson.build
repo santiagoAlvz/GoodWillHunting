@@ -3,7 +3,8 @@ goodwillhunting2_sources = [
   'FinalTree.cpp',
   'TreeMaker.cpp',
   'GenericTreeMaker.cpp',
-  'ArrangementsTable.cpp'
+  'ArrangementsTable.cpp',
+  'TreeFile.cpp'
 ]
 
 goodwillhunting2_deps = [

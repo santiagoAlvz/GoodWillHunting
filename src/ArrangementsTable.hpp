@@ -3,17 +3,20 @@
 
 #include <iostream>
 #include <vector>
+#include "TreeFile.hpp"
 
 using std::endl;
 using std::vector;
 using std::pair;
 using std::make_pair;
+using std::string;
 
 class ArrangementsTable: public vector<vector<pair<vector<pair<unsigned,unsigned>>,vector<unsigned>>>>{
 	private:
 		unsigned n = 0;
 	public:
 		ArrangementsTable(unsigned);
+		void printToFile(string, unsigned);
 
 	friend std::ostream& operator<<(std::ostream& os, const ArrangementsTable arr){
 		for(unsigned long i = 1; i < arr.n + 1; i++){
