@@ -5,20 +5,23 @@
 #include <utility>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 using std::pair;
 using std::string;
 using std::ofstream;
 using std::endl;
+using std::vector;
 
 class TreeFile {
 	private:
-		unsigned index;
+		unsigned treeNumber = 0;
 		string id;
 		ofstream file;
+		void makeId();
 	public:
 		TreeFile(string);
-		void newTree(unsigned);
+		void newTree(unsigned, vector<unsigned>);
 		void addEdge(pair<unsigned,unsigned>);
 		void close();
 };

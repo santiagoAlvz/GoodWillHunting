@@ -12,7 +12,7 @@ void ArrangementsTable::printToFile(string filename, unsigned n){
     TreeFile file(filename);
 
     for(unsigned long i = 0; i < (*this)[n].size(); i++){
-        file.newTree(n);
+        file.newTree(n, (*this)[n][i].second );
         for(unsigned long j = 0; j < (*this)[n][i].first.size(); j++){
             file.addEdge((*this)[n][i].first[j]);
         }
