@@ -29,7 +29,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
             while(temp.size() < n - 1){
                 temp.push_back(make_pair(0, temp.size() + 1));
             }
-            (*arrangements)[n].push_back(temp);
+            (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
             continue;
         }
 
@@ -47,9 +47,9 @@ void GenericTreeMaker::createArrangements(unsigned n){
                 usedEdges = vector<unsigned>(length, 0);
                 valid = true;
 
-                for(unsigned long k = 0; k < (*arrangements)[length][j].size(); k++){
-                    usedEdges[(*arrangements)[length][j][k].first]++;
-                    usedEdges[(*arrangements)[length][j][k].second]++;
+                for(unsigned long k = 0; k < (*arrangements)[length][j].first.size(); k++){
+                    usedEdges[(*arrangements)[length][j].first[k].first]++;
+                    usedEdges[(*arrangements)[length][j].first[k].second]++;
                 }
 
                 for(unsigned long k = 0; k < length; k++){
@@ -58,7 +58,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
                 if(!valid) continue;
 
-                temp = (*arrangements)[length][j];
+                temp = (*arrangements)[length][j].first;
                 cont = 0;
                 while(temp.size() < n - 1){
 
@@ -69,7 +69,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
                     usedEdges[cont]++;
                 }
 
-                if(isUnique(temp)) (*arrangements)[n].push_back(temp);
+                if(isUnique(temp)) (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
 
             } while ( std::next_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
         }

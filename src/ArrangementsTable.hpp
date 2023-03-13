@@ -9,7 +9,7 @@ using std::vector;
 using std::pair;
 using std::make_pair;
 
-class ArrangementsTable: public vector<vector<vector<pair<unsigned,unsigned>>>>{
+class ArrangementsTable: public vector<vector<pair<vector<pair<unsigned,unsigned>>,vector<unsigned>>>>{
 	private:
 		unsigned n = 0;
 	public:
@@ -20,10 +20,14 @@ class ArrangementsTable: public vector<vector<vector<pair<unsigned,unsigned>>>>{
 		    os<<i<<":"<<endl;
 		    for(unsigned long j = 0; j < arr[i].size(); j++){
 		        os<<"\t";
-		        for(unsigned long k = 0; k < arr[i][j].size(); k++){
-		            os<<"["<<arr[i][j][k].first<<","<<arr[i][j][k].second<<"] ";
+		        for(unsigned long k = 0; k < arr[i][j].first.size(); k++){
+		            os<<"["<<arr[i][j].first[k].first<<","<<arr[i][j].first[k].second<<"] ";
 		        }
-		        os<<endl;
+		        os<<"\t[";
+		        for(unsigned long k = 0; k < arr[i][j].second.size(); k++){
+		        	os<<arr[i][j].second[k]<<",";
+		        }
+		        os<<"]"<<endl;
 		    }
 		}
 		return os;
