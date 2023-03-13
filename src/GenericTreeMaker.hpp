@@ -23,8 +23,8 @@ class GenericTreeMaker{
 		GenericTreeMaker();
 		GenericTreeMaker(ArrangementsTable *);
 		void createArrangements(unsigned);
-		bool isUnique(vector<pair<unsigned,unsigned>>);
-		void measureLevelDistribution(vector<vector<unsigned int>> &, unsigned, unsigned);
+		bool isUnique(vector<pair<unsigned,unsigned>>, vector<unsigned>);
+		void measureLevelDistribution(vector<vector<unsigned int>> &, unsigned, int, unsigned);
 		virtual void decompose(unsigned, unsigned) = 0;
 		virtual void createMissingArrangements(unsigned) = 0;
 };

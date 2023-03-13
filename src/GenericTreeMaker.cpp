@@ -34,7 +34,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
             continue;
         }
 
-        if(length == 2){
+        /*if(length == 2){
 
             for(unsigned long j = 1; j < n; j++){
                 if(j <=  decomposedEdgeCount[i][0]){
@@ -44,7 +44,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
             (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
             continue;
-        }
+        }*/
 
         if((*arrangements)[decomposedEdgeCount[i].size()].empty()){
             //Create the (*arrangements) for its size
@@ -82,14 +82,16 @@ void GenericTreeMaker::createArrangements(unsigned n){
                     usedEdges[cont]++;
                 }
 
-                if(isUnique(temp)) (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
+                if(isUnique(temp, (*arrangements)[length][j].second)){
+                    (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
+                }
 
             } while ( std::next_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
         }
     }
 }
 
-bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges){
+bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<unsigned> arr){
     vector<vector<unsigned>> adjList(edges.size() + 1);
     levelDistribution.resize(edges.size() + 1);
     std::fill(levelDistribution.begin(), levelDistribution.end(), 0);
@@ -99,7 +101,7 @@ bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges){
         adjList[edges[i].second].push_back(edges[i].first);
     }
 
-    measureLevelDistribution(adjList,0,0);
+    measureLevelDistribution(adjList,0, -1, 0);
 
     for(unsigned long i = 0; i < usedLevelDistributions.size(); i++){
         if(levelDistribution == usedLevelDistributions[i]){
@@ -109,13 +111,20 @@ bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges){
 
     usedLevelDistributions.push_back(levelDistribution);
 
+    if(arr.size() == 0 || (arr.size() % 2 == 0 && arr.front() == 2 && arr.back() == 2)){
+
+        std::fill(levelDistribution.begin(), levelDistribution.end(), 0);
+        measureLevelDistribution(adjList, 1, -1, 0);
+        usedLevelDistributions.push_back(levelDistribution);
+    }
+
     return true;
 }
 
-void GenericTreeMaker::measureLevelDistribution(vector<vector<unsigned int>> &adjList, unsigned node, unsigned level){
+void GenericTreeMaker::measureLevelDistribution(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
     levelDistribution[level]++;
 
-    for(unsigned neighbour: adjList[node]){
-        if(neighbour > node) measureLevelDistribution(adjList, neighbour, level + 1);
+    for(int neighbour: adjList[node]){
+        if(neighbour != parent) measureLevelDistribution(adjList, neighbour, node, level + 1);
     }
 }
