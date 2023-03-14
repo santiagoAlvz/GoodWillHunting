@@ -10,8 +10,8 @@ int main() {
     ArrangementsTable arrangements(N);
 	FinalTree tree(&arrangements);
 	tree.createArrangements(N);
-	//tree.printArrangements();
-	cout<<arrangements<<endl;
+	arrangements.printStats();
+	//cout<<arrangements<<endl;
 	arrangements.printToFile("output",N);
 
 	return 0;

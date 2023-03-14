@@ -20,3 +20,7 @@ void ArrangementsTable::printToFile(string filename, unsigned n){
 
     file.close();
 }
+
+void ArrangementsTable::printStats(){
+    std::cout<<"For N = "<<n<<", there are "<<(*this)[n].size()<<" arrangements"<<std::endl;
+}

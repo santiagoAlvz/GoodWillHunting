@@ -17,6 +17,7 @@ class ArrangementsTable: public vector<vector<pair<vector<pair<unsigned,unsigned
 	public:
 		ArrangementsTable(unsigned);
 		void printToFile(string, unsigned);
+		void printStats();
 
 	friend std::ostream& operator<<(std::ostream& os, const ArrangementsTable arr){
 		for(unsigned long i = 1; i < arr.n + 1; i++){

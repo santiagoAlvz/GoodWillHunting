@@ -15,9 +15,9 @@ using std::endl;
 
 class GenericTreeMaker{
 	protected:
-		vector<vector<unsigned>> usedLevelDistributions;
+		vector<vector<pair<unsigned,unsigned>>> usedLevelDistributions;
 		vector<vector<unsigned>> decomposedEdgeCount;
-		vector<unsigned> levelDistribution;
+		vector<pair<unsigned,unsigned>> levelDistribution;
 		ArrangementsTable *arrangements;
 	public:
 		GenericTreeMaker();

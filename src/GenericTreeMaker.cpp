@@ -51,6 +51,8 @@ void GenericTreeMaker::createArrangements(unsigned n){
             createMissingArrangements(decomposedEdgeCount[i].size());
         }
 
+
+
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
             usedLevelDistributions.clear();
             std::sort(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end());
@@ -93,8 +95,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
 bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<unsigned> arr){
     vector<vector<unsigned>> adjList(edges.size() + 1);
-    levelDistribution.resize(edges.size() + 1);
-    std::fill(levelDistribution.begin(), levelDistribution.end(), 0);
+    levelDistribution.clear();
 
     for(unsigned long i = 0; i < edges.size(); i++){
         adjList[edges[i].first].push_back(edges[i].second);
@@ -102,6 +103,7 @@ bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<un
     }
 
     measureLevelDistribution(adjList,0, -1, 0);
+    std::sort(levelDistribution.begin(), levelDistribution.end());
 
     for(unsigned long i = 0; i < usedLevelDistributions.size(); i++){
         if(levelDistribution == usedLevelDistributions[i]){
@@ -113,8 +115,9 @@ bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<un
 
     if(arr.size() == 0 || (arr.size() % 2 == 0 && arr.front() == 2 && arr.back() == 2)){
 
-        std::fill(levelDistribution.begin(), levelDistribution.end(), 0);
+        levelDistribution.clear();
         measureLevelDistribution(adjList, 1, -1, 0);
+        std::sort(levelDistribution.begin(), levelDistribution.end());
         usedLevelDistributions.push_back(levelDistribution);
     }
 
@@ -122,9 +125,16 @@ bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<un
 }
 
 void GenericTreeMaker::measureLevelDistribution(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
-    levelDistribution[level]++;
 
+    int cont = 0;
     for(int neighbour: adjList[node]){
-        if(neighbour != parent) measureLevelDistribution(adjList, neighbour, node, level + 1);
+        if(neighbour != parent){
+            if(adjList[neighbour].size() == 1){
+                cont++;
+            }
+            measureLevelDistribution(adjList, neighbour, node, level + 1);
+        }
     }
+
+    if (cont > 0) levelDistribution.push_back(make_pair(level, cont));
 }
