@@ -13,11 +13,11 @@ using std::make_pair;
 using std::cout;
 using std::endl;
 
-class FinalTree: public GenericTreeMaker{
+class FinalTreeMaker: public GenericTreeMaker{
 	private:
 		TreeMaker treeMaker;
 	public:
-		FinalTree(ArrangementsTable *);
+		FinalTreeMaker(ArrangementsTable *);
 		void decompose(unsigned, unsigned);
 		void createMissingArrangements(unsigned);
 };

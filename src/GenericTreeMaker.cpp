@@ -34,27 +34,13 @@ void GenericTreeMaker::createArrangements(unsigned n){
             continue;
         }
 
-        /*if(length == 2){
-
-            for(unsigned long j = 1; j < n; j++){
-                if(j <=  decomposedEdgeCount[i][0]){
-                    temp.push_back(make_pair(0,j));
-                } else temp.push_back(make_pair(1,j));
-            }
-
-            (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
-            continue;
-        }*/
-
         if((*arrangements)[decomposedEdgeCount[i].size()].empty()){
-            //Create the (*arrangements) for its size
+            //Create the arrangements for its size
             createMissingArrangements(decomposedEdgeCount[i].size());
         }
 
-
-
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
-            usedLevelDistributions.clear();
+            usedLeafNodeClusters.clear();
             std::sort(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end());
 
             do {
@@ -95,36 +81,36 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
 bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<unsigned> arr){
     vector<vector<unsigned>> adjList(edges.size() + 1);
-    levelDistribution.clear();
+    leafNodeClusters.clear();
 
     for(unsigned long i = 0; i < edges.size(); i++){
         adjList[edges[i].first].push_back(edges[i].second);
         adjList[edges[i].second].push_back(edges[i].first);
     }
 
-    measureLevelDistribution(adjList,0, -1, 0);
-    std::sort(levelDistribution.begin(), levelDistribution.end());
+    measureLeafNodeClusters(adjList,0, -1, 0);
+    std::sort(leafNodeClusters.begin(), leafNodeClusters.end());
 
-    for(unsigned long i = 0; i < usedLevelDistributions.size(); i++){
-        if(levelDistribution == usedLevelDistributions[i]){
+    for(unsigned long i = 0; i < usedLeafNodeClusters.size(); i++){
+        if(leafNodeClusters == usedLeafNodeClusters[i]){
             return false;
         }
     }
 
-    usedLevelDistributions.push_back(levelDistribution);
+    usedLeafNodeClusters.push_back(leafNodeClusters);
 
     if(arr.size() == 0 || (arr.size() % 2 == 0 && arr.front() == 2 && arr.back() == 2)){
 
-        levelDistribution.clear();
-        measureLevelDistribution(adjList, 1, -1, 0);
-        std::sort(levelDistribution.begin(), levelDistribution.end());
-        usedLevelDistributions.push_back(levelDistribution);
+        leafNodeClusters.clear();
+        measureLeafNodeClusters(adjList, 1, -1, 0);
+        std::sort(leafNodeClusters.begin(), leafNodeClusters.end());
+        usedLeafNodeClusters.push_back(leafNodeClusters);
     }
 
     return true;
 }
 
-void GenericTreeMaker::measureLevelDistribution(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
+void GenericTreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
 
     int cont = 0;
     for(int neighbour: adjList[node]){
@@ -132,9 +118,9 @@ void GenericTreeMaker::measureLevelDistribution(vector<vector<unsigned int>> &ad
             if(adjList[neighbour].size() == 1){
                 cont++;
             }
-            measureLevelDistribution(adjList, neighbour, node, level + 1);
+            measureLeafNodeClusters(adjList, neighbour, node, level + 1);
         }
     }
 
-    if (cont > 0) levelDistribution.push_back(make_pair(level, cont));
+    if (cont > 0) leafNodeClusters.push_back(make_pair(level, cont));
 }

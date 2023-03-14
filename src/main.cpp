@@ -1,5 +1,5 @@
 #include <iostream>
-#include "FinalTree.hpp"
+#include "FinalTreeMaker.hpp"
 
 using std::cout;
 using std::endl;
@@ -8,7 +8,7 @@ using std::endl;
 
 int main() {
     ArrangementsTable arrangements(N);
-	FinalTree tree(&arrangements);
+	FinalTreeMaker tree(&arrangements);
 	tree.createArrangements(N);
 	arrangements.printStats();
 	arrangements.printToFile("output",N);

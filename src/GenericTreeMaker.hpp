@@ -15,16 +15,16 @@ using std::endl;
 
 class GenericTreeMaker{
 	protected:
-		vector<vector<pair<unsigned,unsigned>>> usedLevelDistributions;
+		vector<vector<pair<unsigned,unsigned>>> usedLeafNodeClusters;
 		vector<vector<unsigned>> decomposedEdgeCount;
-		vector<pair<unsigned,unsigned>> levelDistribution;
+		vector<pair<unsigned,unsigned>> leafNodeClusters;
 		ArrangementsTable *arrangements;
 	public:
 		GenericTreeMaker();
 		GenericTreeMaker(ArrangementsTable *);
 		void createArrangements(unsigned);
 		bool isUnique(vector<pair<unsigned,unsigned>>, vector<unsigned>);
-		void measureLevelDistribution(vector<vector<unsigned int>> &, unsigned, int, unsigned);
+		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
 		virtual void decompose(unsigned, unsigned) = 0;
 		virtual void createMissingArrangements(unsigned) = 0;
 };

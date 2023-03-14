@@ -1,12 +1,12 @@
-#include "FinalTree.hpp"
+#include "FinalTreeMaker.hpp"
 
-FinalTree::FinalTree(ArrangementsTable *arr){
+FinalTreeMaker::FinalTreeMaker(ArrangementsTable *arr){
     arrangements = arr;
 
     treeMaker = TreeMaker(arr);
 }
 
-void FinalTree::decompose(unsigned remaining, unsigned max){
+void FinalTreeMaker::decompose(unsigned remaining, unsigned max){
     int lastPos = decomposedEdgeCount.size() - 1;
 
     if (remaining == 0) return;
@@ -35,6 +35,6 @@ void FinalTree::decompose(unsigned remaining, unsigned max){
     if(lastPos >= 0) decomposedEdgeCount.erase(decomposedEdgeCount.begin() + lastPos);
 }
 
-void FinalTree::createMissingArrangements(unsigned n){
+void FinalTreeMaker::createMissingArrangements(unsigned n){
     treeMaker.createArrangements(n);
 }
