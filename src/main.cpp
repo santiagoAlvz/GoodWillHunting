@@ -11,7 +11,6 @@ int main() {
 	FinalTree tree(&arrangements);
 	tree.createArrangements(N);
 	arrangements.printStats();
-	//cout<<arrangements<<endl;
 	arrangements.printToFile("output",N);
 
 	return 0;
