@@ -16,9 +16,11 @@ void TreeFile::newTree(unsigned int n, vector<unsigned> nodeScores){
     while(i < nodeScores.size() && i < n){
         file<<"\t"<<id<<i<<"[label="<<nodeScores[i]<<",";
         if(nodeScores[i] > 5){
-            file<<"style=filled, fillcolor="<<(nodeScores[i] > 9 ? 9: nodeScores[i])<<", fontcolor=white, shape=circle, penwidth=0]"<<endl;
+            file<<"style=filled, fillcolor="<<(nodeScores[i] > 9 ? 9: nodeScores[i]);
+            file<<", fontcolor=white, shape=circle, penwidth=0]"<<endl;
         } else {
-            file<<"style=filled, fillcolor="<<nodeScores[i]<<", fontcolor=black, shape=circle, penwidth=0]"<<endl;
+            file<<"style=filled, fillcolor="<<nodeScores[i];
+            file<<", fontcolor=black, shape=circle, penwidth=0]"<<endl;
         }
 
         i++;

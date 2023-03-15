@@ -4,14 +4,20 @@
 using std::cout;
 using std::endl;
 
-#define N 10
+int main(int argc, char* argv[]) {
 
-int main() {
-    ArrangementsTable arrangements(N);
+    if(argc < 2){
+        cout<<"N value wasn't provided"<<endl;
+        return 1;
+    }
+
+    unsigned n = atoi(argv[1]);
+
+    ArrangementsTable arrangements(n);
 	FinalTreeMaker tree(&arrangements);
-	tree.createArrangements(N);
+	tree.createArrangements(n);
 	arrangements.printStats();
-	arrangements.printToFile("output",N);
+	arrangements.printToFile("output",n);
 
 	return 0;
 }
