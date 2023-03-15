@@ -7,7 +7,7 @@ TreeFile::TreeFile(string filename){
     file<<"\tnode [colorscheme=blues9, fontname=\"sans\"]"<<endl;
 }
 
-void TreeFile::newTree(unsigned int n, vector<unsigned> nodeScores){
+void TreeFile::newTree(unsigned int n, seed nodeScores){
     treeNumber++;
     makeId();
 
@@ -31,8 +31,8 @@ void TreeFile::newTree(unsigned int n, vector<unsigned> nodeScores){
     }
 }
 
-void TreeFile::addEdge(pair<unsigned int, unsigned int> edge){
-    file<<"\t"<<id<<edge.first<<" -- "<<id<<edge.second<<endl;
+void TreeFile::addEdge(edge connection){
+    file<<"\t"<<id<<connection.first<<" -- "<<id<<connection.second<<endl;
 }
 
 void TreeFile::close(){

@@ -16,7 +16,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
         }
     }
 
-    vector<pair<unsigned,unsigned>> temp;
+    edgeList temp;
     vector<unsigned> usedEdges;
     unsigned length;
     bool valid = true;
@@ -28,7 +28,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
         if(length == 1){
             while(temp.size() < n - 1){
-                temp.push_back(make_pair(0, temp.size() + 1));
+                temp.push_back(edge(0, temp.size() + 1));
             }
             (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
             continue;
@@ -41,7 +41,6 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
             usedLeafNodeClusters.clear();
-            std::sort(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end());
 
             do {
 
@@ -66,7 +65,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
                     while(usedEdges[cont] == decomposedEdgeCount[i][cont]){
                         cont++;
                     }
-                    temp.push_back(make_pair(cont, temp.size() + 1));
+                    temp.push_back(edge(cont, temp.size() + 1));
                     usedEdges[cont]++;
                 }
 
@@ -74,12 +73,12 @@ void GenericTreeMaker::createArrangements(unsigned n){
                     (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
                 }
 
-            } while ( std::next_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
+            } while ( std::prev_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
         }
     }
 }
 
-bool GenericTreeMaker::isUnique(vector<pair<unsigned,unsigned>> edges, vector<unsigned> arr){
+bool GenericTreeMaker::isUnique(edgeList edges, seed arr){
     vector<vector<unsigned>> adjList(edges.size() + 1);
     leafNodeClusters.clear();
 
@@ -122,5 +121,5 @@ void GenericTreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adj
         }
     }
 
-    if (cont > 0) leafNodeClusters.push_back(make_pair(level, cont));
+    if (cont > 0) leafNodeClusters.push_back(leafNodeCluster(level, cont));
 }

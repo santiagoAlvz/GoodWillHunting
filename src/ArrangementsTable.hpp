@@ -3,15 +3,16 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 #include "TreeFile.hpp"
+#include "definitions.hpp"
 
 using std::endl;
 using std::vector;
-using std::pair;
-using std::make_pair;
 using std::string;
+using std::pair;
 
-class ArrangementsTable: public vector<vector<pair<vector<pair<unsigned,unsigned>>,vector<unsigned>>>>{
+class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 	private:
 		unsigned n = 0;
 	public:
@@ -21,15 +22,22 @@ class ArrangementsTable: public vector<vector<pair<vector<pair<unsigned,unsigned
 
 	friend std::ostream& operator<<(std::ostream& os, const ArrangementsTable arr){
 		for(unsigned long i = 1; i < arr.n + 1; i++){
+			//For every node count in the table
 		    os<<i<<":"<<endl;
+
 		    for(unsigned long j = 0; j < arr[i].size(); j++){
+		    	//For each arrangement with i size
 		        os<<"\t";
-		        for(unsigned long k = 0; k < arr[i][j].first.size(); k++){
-		            os<<"["<<arr[i][j].first[k].first<<","<<arr[i][j].first[k].second<<"] ";
+
+		        for(edge e: arr[i][j].first){
+		        	//for each edge in the arrangements list
+		            os<<"["<<e.first<<","<<e.second<<"] ";
 		        }
 		        os<<"\t[";
-		        for(unsigned long k = 0; k < arr[i][j].second.size(); k++){
-		        	os<<arr[i][j].second[k]<<",";
+
+		        for(unsigned u: arr[i][j].second){
+		        	//for each number in the seed
+		        	os<<u<<",";
 		        }
 		        os<<"]"<<endl;
 		    }
