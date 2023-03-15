@@ -10,7 +10,7 @@ goodwillhunting2_sources = [
 goodwillhunting2_deps = [
 ]
 
-executable('goodwillhunting2', goodwillhunting2_sources,
+executable('goodwillhunting', goodwillhunting2_sources,
   dependencies: goodwillhunting2_deps,
   install: true,
 )

@@ -23,6 +23,8 @@ void readArguments(int argc, char* argv[], PARAMETERS &rP){
                 case 'v':
                     rP.verbose = true;
                     break;
+                case 'h':
+                    throw("");
                 default:
                     throw("Unknown argument -" + argv[i][1]);
             }
@@ -35,6 +37,14 @@ void readArguments(int argc, char* argv[], PARAMETERS &rP){
     if(!specifiedN) throw("Missing N value");
 }
 
+void printHelp(){
+    cout<<"usage: goodwillhunting [options] N"<<endl;
+
+    cout<<"options:"<<endl;
+    cout<<"\t-o [filename]\tProvides a custom filename for the output, if not specified, 'output' is used"<<endl;
+    cout<<"\t-v\t(from verbose) prints the arrangement matrix"<<endl;
+}
+
 int main(int argc, char* argv[]) {
 
     PARAMETERS runtimeParameters;
@@ -43,6 +53,7 @@ int main(int argc, char* argv[]) {
         readArguments(argc, argv, runtimeParameters);
     } catch(char const* message){
         cout<<message<<endl;
+        printHelp();
         return 1;
     }
 
