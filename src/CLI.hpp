@@ -5,6 +5,10 @@
 #define NO_VALUE_BOOL 1
 
 #include <queue>
+#include <iostream>
+
+using std::cout;
+using std::endl;
 
 struct arguments{
 	int n;
@@ -45,6 +49,7 @@ void readArguments(int argc, char* argv[]){
 	bool found;
 	bool isNPresent = false;
 
+	//Enters all arguments into a queue. It splits grouped short options
 	for(int i = 1; i < argc; i++){
 		if(argv[i][0] == '-' && argv[i][1] != '-'){
 			element = argv[i];

@@ -14,18 +14,18 @@ using std::pair;
 
 class GenericTreeMaker{
 	protected:
+		ArrangementsTable *arrangements;
+		bool hIrreducible;
+		unsigned n;
 		vector<vector<leafNodeCluster>> usedLeafNodeClusters;
 		vector<seed> decomposedEdgeCount;
 		vector<leafNodeCluster> leafNodeClusters;
-		ArrangementsTable *arrangements;
 	public:
-		GenericTreeMaker();
-		GenericTreeMaker(ArrangementsTable *);
-		void createArrangements(unsigned);
+		GenericTreeMaker(ArrangementsTable *, unsigned, bool);
+		void createArrangement();
+		void decompose(unsigned, unsigned);
 		bool isUnique(edgeList, seed);
 		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
-		virtual void decompose(unsigned, unsigned) = 0;
-		virtual void createMissingArrangements(unsigned) = 0;
 };
 
 #endif

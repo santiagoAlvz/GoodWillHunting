@@ -1,13 +1,14 @@
 #include "GenericTreeMaker.hpp"
 
-GenericTreeMaker::GenericTreeMaker(){}
+GenericTreeMaker::GenericTreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
+    arrangements = arr;
+    n = nodes;
+    hIrreducible = hi;
 
-GenericTreeMaker::GenericTreeMaker(ArrangementsTable *arr){
-    this->arrangements = arr;
+    createArrangement();
 }
 
-void GenericTreeMaker::createArrangements(unsigned n){
-    decomposedEdgeCount.clear();
+void GenericTreeMaker::createArrangement(){
     decompose(n - 2, n - 2);
 
     for(unsigned long i = 0; i < decomposedEdgeCount.size(); i++){
@@ -36,7 +37,7 @@ void GenericTreeMaker::createArrangements(unsigned n){
 
         if((*arrangements)[decomposedEdgeCount[i].size()].empty()){
             //Create the arrangements for its size
-            createMissingArrangements(decomposedEdgeCount[i].size());
+            GenericTreeMaker secondaryTreeMaker(arrangements, decomposedEdgeCount[i].size(), false);
         }
 
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
@@ -76,6 +77,36 @@ void GenericTreeMaker::createArrangements(unsigned n){
             } while ( std::prev_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
         }
     }
+}
+
+void GenericTreeMaker::decompose(unsigned remaining, unsigned max){
+    unsigned min = hIrreducible ? 2 : 1;
+    int lastPos = decomposedEdgeCount.size() - 1;
+
+    if (remaining == 0) return;
+
+    for(unsigned i = (remaining < max) ? remaining : max; i >= min; i--){
+        if(remaining == i){
+            if(lastPos < 0){
+                decomposedEdgeCount.resize(1);
+                decomposedEdgeCount.back().push_back(i);
+            } else {
+                decomposedEdgeCount.push_back(decomposedEdgeCount[lastPos]);
+                decomposedEdgeCount.back().push_back(i);
+            }
+        } else if ( remaining - i >= min) {
+            if(lastPos < 0){
+                decomposedEdgeCount.resize(decomposedEdgeCount.size() + 1);
+            } else {
+                decomposedEdgeCount.push_back(decomposedEdgeCount[lastPos]);
+            }
+
+            decomposedEdgeCount.back().push_back(i);
+            decompose(remaining - i, i);
+        }
+    }
+
+    if(lastPos >= 0) decomposedEdgeCount.erase(decomposedEdgeCount.begin() + lastPos);
 }
 
 bool GenericTreeMaker::isUnique(edgeList edges, seed arr){

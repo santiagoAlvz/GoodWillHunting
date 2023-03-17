@@ -1,9 +1,5 @@
-#include <iostream>
-#include "FinalTreeMaker.hpp"
+#include "GenericTreeMaker.hpp"
 #include "CLI.hpp"
-
-using std::cout;
-using std::endl;
 
 int main(int argc, char* argv[]) {
 
@@ -21,8 +17,7 @@ int main(int argc, char* argv[]) {
     }
 
     ArrangementsTable arrangements(runtimeArgs.n);
-	FinalTreeMaker tree(&arrangements);
-	tree.createArrangements(runtimeArgs.n);
+	GenericTreeMaker tree(&arrangements, runtimeArgs.n, true);
 
 	if(runtimeArgs.verbose) cout<<arrangements<<endl;
 
