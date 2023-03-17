@@ -1,8 +1,10 @@
 # Good Will Hunting (homeomorphically irreducible trees for a given n)
 
-This program creates all possible homeomorphically irreducible trees for a user-specified n (a.k.a. all unique trees where all n nodes are connected and there aren't nodes with 2 connections) and outputs a graphviz file with all possible arrangements.
+This program creates all possible homeomorphically irreducible trees for a user-specified n (a.k.a. all unique trees where all n nodes are connected and there aren't nodes with 2 edges) and outputs a graphviz file with all possible arrangements. Below is an example, for n = 10.
 
-This is the second blackboard problem from the movie "Good Will Hunting", hence the name. The trees are constructed by finding every possible amount of edges (or seed) for every non-leaf node (a process I call decomposition), and arranging them in every possible unique combination (such combinations are obtained by running the same process on lower n values).
+![graphviz](https://user-images.githubusercontent.com/90468276/225737079-675dd22e-3811-4fa4-b173-23fef8861e0e.png "Homeomorphically irreducible trees for n=10")
+
+This is the second MIT-blackboard problem from the movie "Good Will Hunting", hence the name. The trees are constructed by finding every possible amount of edges (or seed) for every non-leaf node (a process I call decomposition), and arranging them in every possible unique combination (such combinations are obtained by running the same process on lower n values).
 
 ## Arguments
 The program expects at least one argument, n, which stands for the number of nodes.
