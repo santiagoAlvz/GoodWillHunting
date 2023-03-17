@@ -13,8 +13,9 @@ The program expects at least one argument, n, which stands for the number of nod
 
 Other possible arguments are:
 - **-o FILENAME, --output FILENAME:** Specifies a custom name for the output file. If not specified, 'output' will be used.
-- **-v, --verbose:** from "verbose". This argument will print the whole arrangement table on screen. The arrangement table is divided by n-value, and for every arrangement it shows all the edges involved (in format [origin, destination]) and the arrangement's seed.
+- **-v, --verbose:** This argument will print the whole arrangement table on screen. The arrangement table is divided by n-value, and for every arrangement it shows all the edges involved (in format [origin, destination]) and the arrangement's seed.
 - **-h, --help:** displays help text
+
 Short options (single character ones) can be grouped.
 
 ## Output
