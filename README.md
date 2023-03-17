@@ -12,8 +12,10 @@ The program expects at least one argument, n, which stands for the number of nod
 `goodwillhunting N`
 
 Other possible arguments are:
-- **-o FILENAME:** Specifies a custom name for the output file. If not specified, 'output' will be used.
-- **-v:** from "verbose". This argument will print the whole arrangement table on screen. The arrangement table is divided by n-value, and for every arrangement it shows all the edges involved (in format [origin, destination]) and the arrangement's seed.
+- **-o FILENAME, --output FILENAME:** Specifies a custom name for the output file. If not specified, 'output' will be used.
+- **-v, --verbose:** from "verbose". This argument will print the whole arrangement table on screen. The arrangement table is divided by n-value, and for every arrangement it shows all the edges involved (in format [origin, destination]) and the arrangement's seed.
+- **-h, --help:** displays help text
+Short options (single character ones) can be grouped.
 
 ## Output
 The output file is in .dot format and is expected to be fed into graphviz for the generation of an image. So far, neato has given the best-looking results, so it's recommended.
