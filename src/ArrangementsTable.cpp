@@ -18,6 +18,7 @@ void ArrangementsTable::printToFile(string filename, unsigned n){
         //Create the tree
         file.newTree();
 
+        //Add the tree's nodes,
         j = 0;
         while(j < (*this)[n][i].second.size()){
             file.newNode((*this)[n][i].second[j], (*this)[n][i].second[j]);
