@@ -16,13 +16,16 @@ using std::endl;
 
 class TreeFile {
 	private:
-		unsigned treeNumber = 0;
-		string currentId;
+		unsigned treeNumber = 0; //number of trees built so far
+		unsigned currentNode = 0; //current node to be built for the current tree
+		string currentId; //Id of the current tree
 		ofstream file; //name of the output file
 		void makeCurrentId();
 	public:
 		TreeFile(string);
-		void newTree(std::vector<unsigned>);
+		void newTree();
+		void newNode(unsigned, unsigned);
+		void newNode(unsigned);
 		void addEdge(edge);
 		void close();
 };
