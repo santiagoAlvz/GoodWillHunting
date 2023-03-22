@@ -1,3 +1,7 @@
+/* Header file for the class TreeFile
+ * TreeFile. Outputs trees (in dot format) to a file
+ */
+
 #ifndef TREEFILE_H
 #define TREEFILE_H
 
@@ -13,12 +17,12 @@ using std::endl;
 class TreeFile {
 	private:
 		unsigned treeNumber = 0;
-		string id;
-		ofstream file;
-		void makeId();
+		string currentId;
+		ofstream file; //name of the output file
+		void makeCurrentId();
 	public:
 		TreeFile(string);
-		void newTree(unsigned, seed);
+		void newTree(std::vector<unsigned>);
 		void addEdge(edge);
 		void close();
 };

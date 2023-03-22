@@ -10,14 +10,27 @@ ArrangementsTable::ArrangementsTable(unsigned n){
 
 void ArrangementsTable::printToFile(string filename, unsigned n){
     TreeFile file(filename);
+    vector<unsigned> nodeScores;
 
+    //Make a tree for every arrangement of size n in the arrangements table
     for(unsigned long i = 0; i < (*this)[n].size(); i++){
-        file.newTree(n, (*this)[n][i].second );
+        nodeScores = (*this)[n][i].second; //Copy the seed from the arrangements table
+
+        //Add all the leaf nodes to the seed in nodeScores
+        while(nodeScores.size() < n){
+            nodeScores.push_back(1);
+        }
+
+        //Create the tree
+        file.newTree(nodeScores);
+
+        //Add all edges of the arrangement
         for(unsigned long j = 0; j < (*this)[n][i].first.size(); j++){
             file.addEdge((*this)[n][i].first[j]);
         }
     }
 
+    //Close the file
     file.close();
 }
 
