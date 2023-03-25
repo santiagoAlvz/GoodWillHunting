@@ -4,7 +4,6 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
-#include <iostream>
 #include "ArrangementsTable.hpp"
 #include "definitions.hpp"
 
