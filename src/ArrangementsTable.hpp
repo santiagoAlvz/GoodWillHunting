@@ -1,3 +1,7 @@
+/* Header file for the class ArrangementsTable
+ * ArrangementsTable. Stores all the all trees generated during execution
+ */
+
 #ifndef ARRANGEMENTSTABLE_H
 #define ARRANGEMENTSTABLE_H
 
@@ -14,13 +18,15 @@ using std::pair;
 
 class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 	private:
-		unsigned n = 0;
+		unsigned n = 0; //initial n value
 	public:
 		ArrangementsTable(unsigned);
 		void printToFile(string, unsigned);
 		void printStats();
 
+	//outputs the contents of the arrangement table into the standard output
 	friend std::ostream& operator<<(std::ostream& os, const ArrangementsTable arr){
+
 		for(unsigned long i = 1; i < arr.n + 1; i++){
 			//For every node count in the table
 		    os<<i<<":"<<endl;
