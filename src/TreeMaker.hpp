@@ -9,7 +9,6 @@
 #include <utility>
 #include <algorithm>
 #include <set>
-#include <iostream>
 #include "ArrangementsTable.hpp"
 #include "definitions.hpp"
 
@@ -28,7 +27,7 @@ class TreeMaker{
 
 		//used for validation of unique trees
 		multiset<multiset<leafNodeCluster>> usedLeafNodeClusters; //leafNodeClusters used for a given seed and
-															  //branch node arrangement
+															      //branch node arrangement
 		multiset<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
 
 	public:
@@ -36,7 +35,7 @@ class TreeMaker{
 		void createArrangement();
 		void decompose();
 		void decompose(unsigned, unsigned);
-		bool isUnique(vector<vector<unsigned>>, seed);
+		bool isUnique(vector<vector<unsigned>>&, seed);
 		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
 };
 
