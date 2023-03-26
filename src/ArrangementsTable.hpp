@@ -39,13 +39,13 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 		        	//for each edge in the arrangements list
 		            os<<"["<<e.first<<","<<e.second<<"] ";
 		        }
-		        os<<"\t[";
+		        os<<"\t{";
 
 		        for(unsigned u: arr[i][j].second){
 		        	//for each number in the seed
 		        	os<<u<<",";
 		        }
-		        os<<"]"<<endl;
+		        os<<"}"<<endl;
 		    }
 		}
 		return os;

@@ -9,6 +9,7 @@
 
 #include <queue>
 #include <iostream>
+#include <algorithm>
 
 using std::cout;
 using std::endl;
