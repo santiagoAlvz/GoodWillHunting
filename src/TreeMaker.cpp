@@ -1,19 +1,27 @@
-#include "GenericTreeMaker.hpp"
+#include "TreeMaker.hpp"
 
-GenericTreeMaker::GenericTreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
+//constructor for the class
+TreeMaker::TreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
+
+    //assign parameters to the attributes
     arrangements = arr;
     n = nodes;
     hIrreducible = hi;
 
+    //create arrangements for the n value
     createArrangement();
 }
 
-void GenericTreeMaker::createArrangement(){
+//creates all unique arrangements for the n value
+void TreeMaker::createArrangement(){
+
+    //generates all the seeds for the n value
     decompose(n - 2, n - 2);
 
-    for(unsigned long i = 0; i < decomposedEdgeCount.size(); i++){
-        for(unsigned long j = 0; j < decomposedEdgeCount[i].size(); j++){
-            decomposedEdgeCount[i][j]++;
+    //adds one to all seed values, so they all s
+    for(unsigned long i = 0; i < seeds.size(); i++){
+        for(unsigned long j = 0; j < seeds[i].size(); j++){
+            seeds[i][j]++;
         }
     }
 
@@ -23,21 +31,21 @@ void GenericTreeMaker::createArrangement(){
     bool valid = true;
     unsigned cont;
 
-    for(unsigned long i = 0; i < decomposedEdgeCount.size(); i++){
-        length = decomposedEdgeCount[i].size();
+    for(unsigned long i = 0; i < seeds.size(); i++){
+        length = seeds[i].size();
         temp.clear();
 
         if(length == 1){
             while(temp.size() < n - 1){
                 temp.push_back(edge(0, temp.size() + 1));
             }
-            (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
+            (*arrangements)[n].push_back(make_pair(temp,seeds[i]));
             continue;
         }
 
-        if((*arrangements)[decomposedEdgeCount[i].size()].empty()){
+        if((*arrangements)[seeds[i].size()].empty()){
             //Create the arrangements for its size
-            GenericTreeMaker secondaryTreeMaker(arrangements, decomposedEdgeCount[i].size(), false);
+            TreeMaker secondaryTreeMaker(arrangements, seeds[i].size(), false);
         }
 
         for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
@@ -54,7 +62,7 @@ void GenericTreeMaker::createArrangement(){
                 }
 
                 for(unsigned long k = 0; k < length; k++){
-                    if(usedEdges[k] > decomposedEdgeCount[i][k]) valid = false;
+                    if(usedEdges[k] > seeds[i][k]) valid = false;
                 }
 
                 if(!valid) continue;
@@ -63,7 +71,7 @@ void GenericTreeMaker::createArrangement(){
                 cont = 0;
                 while(temp.size() < n - 1){
 
-                    while(usedEdges[cont] == decomposedEdgeCount[i][cont]){
+                    while(usedEdges[cont] == seeds[i][cont]){
                         cont++;
                     }
                     temp.push_back(edge(cont, temp.size() + 1));
@@ -71,45 +79,45 @@ void GenericTreeMaker::createArrangement(){
                 }
 
                 if(isUnique(temp, (*arrangements)[length][j].second)){
-                    (*arrangements)[n].push_back(make_pair(temp,decomposedEdgeCount[i]));
+                    (*arrangements)[n].push_back(make_pair(temp,seeds[i]));
                 }
 
-            } while ( std::prev_permutation(decomposedEdgeCount[i].begin(),decomposedEdgeCount[i].end()));
+            } while ( std::prev_permutation(seeds[i].begin(),seeds[i].end()));
         }
     }
 }
 
-void GenericTreeMaker::decompose(unsigned remaining, unsigned max){
+void TreeMaker::decompose(unsigned remaining, unsigned max){
     unsigned min = hIrreducible ? 2 : 1;
-    int lastPos = decomposedEdgeCount.size() - 1;
+    int lastPos = seeds.size() - 1;
 
     if (remaining == 0) return;
 
     for(unsigned i = (remaining < max) ? remaining : max; i >= min; i--){
         if(remaining == i){
             if(lastPos < 0){
-                decomposedEdgeCount.resize(1);
-                decomposedEdgeCount.back().push_back(i);
+                seeds.resize(1);
+                seeds.back().push_back(i);
             } else {
-                decomposedEdgeCount.push_back(decomposedEdgeCount[lastPos]);
-                decomposedEdgeCount.back().push_back(i);
+                seeds.push_back(seeds[lastPos]);
+                seeds.back().push_back(i);
             }
         } else if ( remaining - i >= min) {
             if(lastPos < 0){
-                decomposedEdgeCount.resize(decomposedEdgeCount.size() + 1);
+                seeds.resize(seeds.size() + 1);
             } else {
-                decomposedEdgeCount.push_back(decomposedEdgeCount[lastPos]);
+                seeds.push_back(seeds[lastPos]);
             }
 
-            decomposedEdgeCount.back().push_back(i);
+            seeds.back().push_back(i);
             decompose(remaining - i, i);
         }
     }
 
-    if(lastPos >= 0) decomposedEdgeCount.erase(decomposedEdgeCount.begin() + lastPos);
+    if(lastPos >= 0) seeds.erase(seeds.begin() + lastPos);
 }
 
-bool GenericTreeMaker::isUnique(edgeList edges, seed arr){
+bool TreeMaker::isUnique(edgeList edges, seed arr){
     vector<vector<unsigned>> adjList(edges.size() + 1);
     leafNodeClusters.clear();
 
@@ -140,7 +148,7 @@ bool GenericTreeMaker::isUnique(edgeList edges, seed arr){
     return true;
 }
 
-void GenericTreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
+void TreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
 
     int cont = 0;
     for(int neighbour: adjList[node]){
@@ -153,4 +161,5 @@ void GenericTreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adj
     }
 
     if (cont > 0) leafNodeClusters.push_back(leafNodeCluster(level, cont));
+
 }

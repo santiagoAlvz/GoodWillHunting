@@ -1,4 +1,4 @@
-#include "GenericTreeMaker.hpp"
+#include "TreeMaker.hpp"
 #include "CLI.hpp"
 
 int main(int argc, char* argv[]) {
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     }
 
     ArrangementsTable arrangements(runtimeArgs.n);
-	GenericTreeMaker tree(&arrangements, runtimeArgs.n, true);
+	TreeMaker tree(&arrangements, runtimeArgs.n, true);
 
 	if(runtimeArgs.verbose) cout<<arrangements<<endl;
 

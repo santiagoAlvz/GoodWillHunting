@@ -1,3 +1,7 @@
+/* Header file for the class TreeMaker
+   TreeMaker. Creates all possible trees with a given amount of nodes, and
+   saves them in an Arrangements Table */
+
 #ifndef GENERICTREE_H
 #define GENERICTREE_H
 
@@ -11,16 +15,20 @@ using std::vector;
 using std::make_pair;
 using std::pair;
 
-class GenericTreeMaker{
+class TreeMaker{
 	protected:
-		ArrangementsTable *arrangements;
-		bool hIrreducible;
-		unsigned n;
-		vector<vector<leafNodeCluster>> usedLeafNodeClusters;
-		vector<seed> decomposedEdgeCount;
-		vector<leafNodeCluster> leafNodeClusters;
+		ArrangementsTable *arrangements; //pointer to an arrangements table
+		bool hIrreducible; //if the trees to create must be irreducible or not
+		unsigned n; //number of nodes
+		vector<seed> seeds; //generated seeds for n
+
+		//used for validation of unique trees
+		vector<vector<leafNodeCluster>> usedLeafNodeClusters; //leafNodeClusters used for a given seed and
+															  //branch node arrangement
+		vector<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
+
 	public:
-		GenericTreeMaker(ArrangementsTable *, unsigned, bool);
+		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
 		void decompose(unsigned, unsigned);
 		bool isUnique(edgeList, seed);
