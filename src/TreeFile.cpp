@@ -2,12 +2,19 @@
 
 //Constructor for the TreeFile class
 //Prints the beggining of the dot file
-TreeFile::TreeFile(string filename){
+TreeFile::TreeFile(string filename, bool dm){
     file.open(filename);
+    darkmode = dm;
 
     file<<"graph {"<<endl;
     //declare the colorscheme to be used to color non-leaf nodes
-    file<<"\tnode [colorscheme=blues9, fontname=\"sans\"]"<<endl;
+    if (!darkmode){
+        file<<"\tnode [colorscheme=blues9, fontname=\"sans\"]"<<endl;
+    } else {
+        file<<"\tbgcolor = \"#011437\""<<endl;
+        file<<"\tnode [colorscheme=blues9, fontname=\"sans\", color=white, fontcolor=white]"<<endl;
+        file<<"\tedge [color=white]"<<endl;
+    }
 }
 
 //Creates a new tree, and turns it into the current tree
@@ -24,8 +31,15 @@ void TreeFile::newTree(){
 
 //Adds a new, filled node
 void TreeFile::newNode(unsigned label, unsigned color){
+
+    //normalize the color, and invert it if in dark mode
+    color = color > 9 ? 9: color;
+    if (darkmode){
+        color = 10 - color;
+    }
+
     file<<"\t"<<currentId<<currentNode<<"[label="<<label<<", shape=circle";
-    file<<", style=filled, penwidth=0, fillcolor="<<(color > 9 ? 9: color);
+    file<<", style=filled, penwidth=0, fillcolor="<<color;
 
     if (color > 5){
         file<<", fontcolor=white]"<<endl;

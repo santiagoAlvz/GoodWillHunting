@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     //output
 	arrangements.printStats();
-	arrangements.printToFile(runtimeArgs.output, runtimeArgs.n);
+	arrangements.printToFile(runtimeArgs.output, runtimeArgs.n, runtimeArgs.darkmode);
 
 	return 0;
 }

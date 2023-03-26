@@ -13,8 +13,8 @@ ArrangementsTable::ArrangementsTable(unsigned n){
 }
 
 //outputs the arrangement table as a graphviz file
-void ArrangementsTable::printToFile(string filename, unsigned n){
-    TreeFile file(filename);
+void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
+    TreeFile file(filename, dm);
     unsigned long j;
 
     //Make a tree for every arrangement of size n in the arrangements table

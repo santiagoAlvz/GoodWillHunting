@@ -21,7 +21,7 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 		unsigned n = 0; //initial n value
 	public:
 		ArrangementsTable(unsigned);
-		void printToFile(string, unsigned);
+		void printToFile(string, unsigned, bool);
 		void printStats();
 
 	//outputs the contents of the arrangement table into the standard output
@@ -39,13 +39,13 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 		        	//for each edge in the arrangements list
 		            os<<"["<<e.first<<","<<e.second<<"] ";
 		        }
-		        os<<"\t{";
+		        os<<"\t[";
 
 		        for(unsigned u: arr[i][j].second){
 		        	//for each number in the seed
 		        	os<<u<<",";
 		        }
-		        os<<"}"<<endl;
+		        os<<"]"<<endl;
 		    }
 		}
 		return os;

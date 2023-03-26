@@ -20,6 +20,7 @@ struct arguments{
 	string output = "output";
 	bool verbose = false;
 	bool help = false;
+	bool darkmode = false;
 };
 
 // Instance of arguments to be used in the program
@@ -39,7 +40,8 @@ struct option{
 static struct option const options[] = {
 	{'o',"output",VALUE_REQUIRED_STRING, &runtimeArgs.output,"provide a custom filename for the output, if unspecified, 'output' will be used", " FILENAME"},
 	{'v',"verbose",NO_VALUE_BOOL, &runtimeArgs.verbose, "display the complete arrangements table",""},
-	{'h',"help",NO_VALUE_BOOL, &runtimeArgs.help, "display program help",""}
+	{'h',"help",NO_VALUE_BOOL, &runtimeArgs.help, "display program help",""},
+	{'d',"darkmode",NO_VALUE_BOOL, &runtimeArgs.darkmode, "use dark mode in output file",""}
 };
 
 //prints the help on screen, using the declared options

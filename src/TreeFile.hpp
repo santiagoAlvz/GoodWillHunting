@@ -20,9 +20,10 @@ class TreeFile {
 		unsigned currentNode = 0; //current node to be built for the current tree
 		string currentId; //Id of the current tree
 		ofstream file; //name of the output file
+		bool darkmode = false;
 		void makeCurrentId();
 	public:
-		TreeFile(string);
+		TreeFile(string, bool);
 		void newTree();
 		void newNode(unsigned, unsigned);
 		void newNode(unsigned);
