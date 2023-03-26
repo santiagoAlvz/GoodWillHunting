@@ -6,7 +6,7 @@ TreeMaker::TreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
     //assign parameters to the attributes
     arrangements = arr;
     n = nodes;
-    hIrreducible = hi;
+    minSeedValue = hi ? 2 : 1;
 
     //create arrangements for the n value
     createArrangement();
@@ -16,14 +16,7 @@ TreeMaker::TreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
 void TreeMaker::createArrangement(){
 
     //generates all the seeds for the n value
-    decompose(n - 2, n - 2);
-
-    //adds one to all seed values, so they all s
-    for(unsigned long i = 0; i < seeds.size(); i++){
-        for(unsigned long j = 0; j < seeds[i].size(); j++){
-            seeds[i][j]++;
-        }
-    }
+    decompose();
 
     edgeList temp;
     vector<unsigned> usedEdges;
@@ -87,34 +80,54 @@ void TreeMaker::createArrangement(){
     }
 }
 
-void TreeMaker::decompose(unsigned remaining, unsigned max){
-    unsigned min = hIrreducible ? 2 : 1;
-    int lastPos = seeds.size() - 1;
+//main function for decomposing the n value, a.k.a. splitting it into unique sums
+void TreeMaker::decompose(){
 
+    //add the first seed (one single branch node)
+    seeds.resize(1);
+    seeds[0].push_back(n - 1);
+
+    //traverse the rest of the possible seed values
+    for(unsigned i = n - 3; i >= minSeedValue; i--){
+
+        //if using this as a component doesn't leave us with a less than minimum pending value
+        if ( (n - 2) - i >= minSeedValue){
+
+            //add a row to the seeds list with i as a value, and execute
+            //the decomposition process for the pending value.
+            //This acts as a half-constructed seed
+            seeds.resize(seeds.size() + 1);
+            seeds.back().push_back(i + 1);
+            decompose((n - 2) - i, i);
+
+        }
+    }
+}
+
+//recursive function for decomposition
+void TreeMaker::decompose(unsigned remaining, unsigned max){
+
+    //if a decomposition is complete (i.e. there aren't any pending values), we are done
     if (remaining == 0) return;
 
-    for(unsigned i = (remaining < max) ? remaining : max; i >= min; i--){
-        if(remaining == i){
-            if(lastPos < 0){
-                seeds.resize(1);
-                seeds.back().push_back(i);
-            } else {
-                seeds.push_back(seeds[lastPos]);
-                seeds.back().push_back(i);
-            }
-        } else if ( remaining - i >= min) {
-            if(lastPos < 0){
-                seeds.resize(seeds.size() + 1);
-            } else {
-                seeds.push_back(seeds[lastPos]);
-            }
+    //position in the seeds list of the half-constructed seed to use
+    int parentPos = seeds.size() - 1;
 
-            seeds.back().push_back(i);
+    //for all possible seed values (equal or lesser than the previous value used)
+    for(unsigned i = std::min(remaining, max); i >= minSeedValue; i--){
+
+        //if using this as a component doesn't leave us with a less than minimum pending value
+        if (i == remaining || remaining - i >= minSeedValue){
+
+            //duplicate the half-constructed seed, and add the iterated component
+            seeds.push_back(seeds[parentPos]);
+            seeds.back().push_back(i + 1);
             decompose(remaining - i, i);
         }
     }
 
-    if(lastPos >= 0) seeds.erase(seeds.begin() + lastPos);
+    //delete the half-constructed seed
+    seeds.erase(seeds.begin() + parentPos);
 }
 
 bool TreeMaker::isUnique(edgeList edges, seed arr){

@@ -18,7 +18,8 @@ using std::pair;
 class TreeMaker{
 	protected:
 		ArrangementsTable *arrangements; //pointer to an arrangements table
-		bool hIrreducible; //if the trees to create must be irreducible or not
+		unsigned minSeedValue; //minimum edge count that a branch node may have. Defines if a tree is
+							   //irreducible or not
 		unsigned n; //number of nodes
 		vector<seed> seeds; //generated seeds for n
 
@@ -30,6 +31,7 @@ class TreeMaker{
 	public:
 		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
+		void decompose();
 		void decompose(unsigned, unsigned);
 		bool isUnique(edgeList, seed);
 		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
