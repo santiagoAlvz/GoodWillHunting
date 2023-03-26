@@ -20,59 +20,88 @@ void TreeMaker::createArrangement(){
 
     edgeList temp;
     vector<unsigned> usedEdges;
-    unsigned length;
+    unsigned seedLength;
     bool valid = true;
     unsigned cont;
 
-    for(unsigned long i = 0; i < seeds.size(); i++){
-        length = seeds[i].size();
+    //build the first tree (a single branch node)
+    for(unsigned long i = 1; i < n; i++){
+
+        //relate all nodes to node 0
+        temp.push_back(edge(0, i));
+    }
+    (*arrangements)[n].push_back(make_pair(temp,seeds[0])); //add the tree to the arrangements table
+
+    //for every generated seed, excluding the first one
+    for(unsigned long i = 1; i < seeds.size(); i++){
+        seedLength = seeds[i].size();
         temp.clear();
 
-        if(length == 1){
-            while(temp.size() < n - 1){
-                temp.push_back(edge(0, temp.size() + 1));
-            }
-            (*arrangements)[n].push_back(make_pair(temp,seeds[i]));
-            continue;
-        }
+        //if there aren't any arrangements for the number of branch nodes we need,
+        //make a recursive call to create them
+        if((*arrangements)[seedLength].empty()){
 
-        if((*arrangements)[seeds[i].size()].empty()){
             //Create the arrangements for its size
-            TreeMaker secondaryTreeMaker(arrangements, seeds[i].size(), false);
+            TreeMaker secondaryTreeMaker(arrangements, seedLength, false);
         }
 
-        for(unsigned long j = 0; j < (*arrangements)[length].size(); j++){
+        //for every arrangement that fits our branch nodes
+        //(*arrangements)[seedLength][j] is our arrangement
+        for(unsigned long j = 0; j < (*arrangements)[seedLength].size(); j++){
             usedLeafNodeClusters.clear();
 
+            //for every possible way to assign our branch nodes into the arrangement
             do {
 
-                usedEdges = vector<unsigned>(length, 0);
                 valid = true;
 
-                for(unsigned long k = 0; k < (*arrangements)[length][j].first.size(); k++){
-                    usedEdges[(*arrangements)[length][j].first[k].first]++;
-                    usedEdges[(*arrangements)[length][j].first[k].second]++;
-                }
-
-                for(unsigned long k = 0; k < length; k++){
-                    if(usedEdges[k] > seeds[i][k]) valid = false;
-                }
-
-                if(!valid) continue;
-
-                temp = (*arrangements)[length][j].first;
-                cont = 0;
-                while(temp.size() < n - 1){
-
-                    while(usedEdges[cont] == seeds[i][cont]){
-                        cont++;
+                for(unsigned long k = 0; k < (*arrangements)[seedLength][j].second.size(); k++){
+                    if (seeds[i][k] < (*arrangements)[seedLength][j].second[k]){
+                        valid = false;
+                        break;
                     }
-                    temp.push_back(edge(cont, temp.size() + 1));
-                    usedEdges[cont]++;
                 }
 
-                if(isUnique(temp, (*arrangements)[length][j].second)){
-                    (*arrangements)[n].push_back(make_pair(temp,seeds[i]));
+                if (!valid) continue;
+
+                vector<vector<unsigned>> adjList(n);
+
+                for(edge k : (*arrangements)[seedLength][j].first){
+                    adjList[k.first].push_back(k.second);
+                    adjList[k.second].push_back(k.first);
+                }
+
+                cont = 0;
+                for(unsigned long k = seedLength; k < n; k++){
+
+                    if (seeds[i][cont] == adjList[cont].size()){
+                        cont++;
+                        k--;
+                        continue;
+                    }
+
+                    adjList[cont].push_back(k);
+                    adjList[k].push_back(cont);
+                }
+
+                if(isUnique(adjList, (*arrangements)[seedLength][j].second)){
+
+                    cont = 0;
+                    temp.clear();
+
+                    while (cont < n){
+
+                        if (adjList[cont].empty()){
+                            cont++;
+                            continue;
+                        }
+
+                        temp.push_back(edge(cont,adjList[cont].front()));
+                        adjList[adjList[cont].front()].erase(adjList[adjList[cont].front()].begin());
+                        adjList[cont].erase(adjList[cont].begin());
+                    }
+
+                    (*arrangements)[n].push_back(make_pair(temp, seeds[i]));
                 }
 
             } while ( std::prev_permutation(seeds[i].begin(),seeds[i].end()));
@@ -130,32 +159,20 @@ void TreeMaker::decompose(unsigned remaining, unsigned max){
     seeds.erase(seeds.begin() + parentPos);
 }
 
-bool TreeMaker::isUnique(edgeList edges, seed arr){
-    vector<vector<unsigned>> adjList(edges.size() + 1);
+bool TreeMaker::isUnique(vector<vector<unsigned>> adjList, seed arr){
     leafNodeClusters.clear();
 
-    for(unsigned long i = 0; i < edges.size(); i++){
-        adjList[edges[i].first].push_back(edges[i].second);
-        adjList[edges[i].second].push_back(edges[i].first);
-    }
-
     measureLeafNodeClusters(adjList,0, -1, 0);
-    std::sort(leafNodeClusters.begin(), leafNodeClusters.end());
 
-    for(unsigned long i = 0; i < usedLeafNodeClusters.size(); i++){
-        if(leafNodeClusters == usedLeafNodeClusters[i]){
-            return false;
-        }
-    }
+    if (usedLeafNodeClusters.find(leafNodeClusters) != usedLeafNodeClusters.end()) return false;
 
-    usedLeafNodeClusters.push_back(leafNodeClusters);
+    usedLeafNodeClusters.insert(leafNodeClusters);
 
     if(arr.size() == 0 || (arr.size() % 2 == 0 && arr.front() == 2 && arr.back() == 2)){
 
         leafNodeClusters.clear();
         measureLeafNodeClusters(adjList, 1, -1, 0);
-        std::sort(leafNodeClusters.begin(), leafNodeClusters.end());
-        usedLeafNodeClusters.push_back(leafNodeClusters);
+        usedLeafNodeClusters.insert(leafNodeClusters);
     }
 
     return true;
@@ -173,6 +190,5 @@ void TreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adjList, u
         }
     }
 
-    if (cont > 0) leafNodeClusters.push_back(leafNodeCluster(level, cont));
-
+    if (cont > 0) leafNodeClusters.insert(leafNodeCluster(level, cont));
 }

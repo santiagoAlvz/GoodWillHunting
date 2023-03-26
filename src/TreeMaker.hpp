@@ -8,12 +8,15 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <set>
+#include <iostream>
 #include "ArrangementsTable.hpp"
 #include "definitions.hpp"
 
 using std::vector;
 using std::make_pair;
 using std::pair;
+using std::multiset;
 
 class TreeMaker{
 	protected:
@@ -24,16 +27,16 @@ class TreeMaker{
 		vector<seed> seeds; //generated seeds for n
 
 		//used for validation of unique trees
-		vector<vector<leafNodeCluster>> usedLeafNodeClusters; //leafNodeClusters used for a given seed and
+		multiset<multiset<leafNodeCluster>> usedLeafNodeClusters; //leafNodeClusters used for a given seed and
 															  //branch node arrangement
-		vector<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
+		multiset<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
 
 	public:
 		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
 		void decompose();
 		void decompose(unsigned, unsigned);
-		bool isUnique(edgeList, seed);
+		bool isUnique(vector<vector<unsigned>>, seed);
 		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
 };
 
