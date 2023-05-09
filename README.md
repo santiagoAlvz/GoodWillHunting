@@ -8,6 +8,11 @@ This is the second MIT-blackboard problem from the movie "Good Will Hunting", he
 
 More details on how this program builds a solution can be found [here](https://santiagoalvz.wordpress.com/the-good-will-hunting-problem/).
 
+A demo of the program in operation can be seen [here](https://youtu.be/_N6dCG2ewvg).
+
+## Building
+This program is based on Meson. To build it, download the source, and enter the main directory. Then, run `meson build`, and `ninja -C build`. This will create a new directory called build and a subdirectory named `src`, which contains the executable. For this to work, you must have meson and ninja installed.
+
 ## Arguments
 The program expects at least one argument, n, which stands for the number of nodes of the trees to be generated.
 
