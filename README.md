@@ -6,7 +6,7 @@ This program creates all possible homeomorphically irreducible trees for a user-
 
 This is the second MIT-blackboard problem from the movie "Good Will Hunting", hence the name. The trees are constructed by finding every possible amount of edges (or seed) for every non-leaf node (a process I call decomposition), and arranging them in every possible unique combination (such combinations are obtained by running the same process on lower n values).
 
-More details on how this program builds a solution can be found [here](https://santiagoalvz.wordpress.com/the-good-will-hunting-problem/).
+More details on how this program builds a solution can be found [here](https://santiagoalvz.net/the-good-will-hunting-problem/).
 
 A demo of the program in operation can be seen [here](https://youtu.be/_N6dCG2ewvg).
 
