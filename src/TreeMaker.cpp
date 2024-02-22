@@ -24,15 +24,17 @@ void TreeMaker::createArrangement(){
     bool valid = true;
     unsigned cont;
 
-    //build the first tree (a single branch node)
-    (*arrangements)[n].resize(1);
-    currentArrangement = &(*arrangements)[n].back();
+    //build the first tree, if there's a seed for it (a single branch node)
+    if (seeds.size() > 0){
+        (*arrangements)[n].resize(1);
+        currentArrangement = &(*arrangements)[n].back();
 
-    for(unsigned long i = 1; i < n; i++){
-        //relate all nodes to node 0
-        (*currentArrangement).first.push_back(edge(0, i));
+        for(unsigned long i = 1; i < n; i++){
+            //relate all nodes to node 0
+            (*currentArrangement).first.push_back(edge(0, i));
+        }
+        (*currentArrangement).second = seeds[0];
     }
-    (*currentArrangement).second = seeds[0];
 
     //for every generated seed, excluding the first one
     for(unsigned long i = 1; i < seeds.size(); i++){
@@ -122,11 +124,13 @@ void TreeMaker::createArrangement(){
 
 //main function for decomposing the n value, a.k.a. splitting it into unique sums
 void TreeMaker::decompose(){
-    if(n < 4) return;
+    if(n <= 2) return;
 
-    //add the first seed (one single branch node)
-    seeds.resize(1);
-    seeds[0].push_back(n - 1);
+    if(n - 1 > minSeedValue){
+        //add the first seed (one single branch node)
+        seeds.resize(1);
+        seeds[0].push_back(n - 1);
+    }
 
     //traverse the rest of the possible seed values
     for(unsigned i = n - 3; i >= minSeedValue; i--){
