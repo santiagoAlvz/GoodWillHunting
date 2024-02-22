@@ -28,7 +28,7 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 	friend std::ostream& operator<<(std::ostream& os, const ArrangementsTable arr){
 
 		for(unsigned long i = 1; i < arr.n + 1; i++){
-			//For every node count in the table
+		    //For every node count in the table
 		    os<<i<<":"<<endl;
 
 		    for(unsigned long j = 0; j < arr[i].size(); j++){

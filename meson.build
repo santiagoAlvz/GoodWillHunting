@@ -4,8 +4,5 @@ project('goodwillhunting2', ['cpp', 'c'],
   default_options: [ 'warning_level=2', 'werror=false', 'cpp_std=gnu++2a', ],
 )
 
-
-
-
 subdir('src')
 

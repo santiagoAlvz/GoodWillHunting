@@ -122,6 +122,7 @@ void TreeMaker::createArrangement(){
 
 //main function for decomposing the n value, a.k.a. splitting it into unique sums
 void TreeMaker::decompose(){
+    if(n < 4) return;
 
     //add the first seed (one single branch node)
     seeds.resize(1);
