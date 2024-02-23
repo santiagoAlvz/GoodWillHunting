@@ -29,7 +29,7 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 
 		for(unsigned long i = 1; i < arr.n + 1; i++){
 		    //For every node count in the table
-		    os<<i<<":"<<endl;
+		    os<<i<<":"<<'\n';
 
 		    for(unsigned long j = 0; j < arr[i].size(); j++){
 		    	//For each arrangement with i size
@@ -45,7 +45,7 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 		        	//for each number in the seed
 		        	os<<u<<",";
 		        }
-		        os<<"]"<<endl;
+		        os<<"]"<<'\n';
 		    }
 		}
 		return os;

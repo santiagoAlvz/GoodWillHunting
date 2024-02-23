@@ -46,13 +46,13 @@ static struct option const options[] = {
 
 //prints the help on screen, using the declared options
 void printHelp(){
-	cout<<"usage: goodwillhunting [options] N"<<endl;
-	cout<<"options:"<<endl;
+	cout<<"usage: goodwillhunting [options] N"<<'\n';
+	cout<<"options:"<<'\n';
 
 	//print all options, with their help
 	for(unsigned long j = 0; j < sizeof(options) / sizeof(option); j++){
-		cout<<"  -"<<options[j].c<<options[j].fieldName<<", --"<<options[j].name<<options[j].fieldName<<endl;
-		cout<<"      "<<options[j].help<<endl;
+		cout<<"  -"<<options[j].c<<options[j].fieldName<<", --"<<options[j].name<<options[j].fieldName<<'\n';
+		cout<<"      "<<options[j].help<<'\n';
 	}
 }
 

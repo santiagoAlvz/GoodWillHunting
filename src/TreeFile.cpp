@@ -6,14 +6,14 @@ TreeFile::TreeFile(string filename, bool dm){
     file.open(filename);
     darkmode = dm;
 
-    file<<"graph {"<<endl;
+    file<<"graph {"<<'\n';
     //declare the colorscheme to be used to color non-leaf nodes
     if (!darkmode){
-        file<<"\tnode [colorscheme=blues9, fontname=\"sans\"]"<<endl;
+        file<<"\tnode [colorscheme=blues9, fontname=\"sans\"]"<<'\n';
     } else {
-        file<<"\tbgcolor = \"#011437\""<<endl;
-        file<<"\tnode [colorscheme=blues9, fontname=\"sans\", color=white, fontcolor=white]"<<endl;
-        file<<"\tedge [color=white]"<<endl;
+        file<<"\tbgcolor = \"#011437\""<<'\n';
+        file<<"\tnode [colorscheme=blues9, fontname=\"sans\", color=white, fontcolor=white]"<<'\n';
+        file<<"\tedge [color=white]"<<'\n';
     }
 }
 
@@ -23,7 +23,7 @@ void TreeFile::newTree(){
 
     currentNode = 0;
 
-    file<<"\t//Tree with id "<<currentId<<endl;
+    file<<"\t//Tree with id "<<currentId<<'\n';
 
     //Increase the number of trees used so far
     treeNumber++;
@@ -42,9 +42,9 @@ void TreeFile::newNode(unsigned label, unsigned color){
     file<<", style=filled, penwidth=0, fillcolor="<<color;
 
     if (color > 5){
-        file<<", fontcolor=white]"<<endl;
+        file<<", fontcolor=white]"<<'\n';
     } else {
-        file<<", fontcolor=black]"<<endl;
+        file<<", fontcolor=black]"<<'\n';
     }
 
     currentNode++;
@@ -52,19 +52,19 @@ void TreeFile::newNode(unsigned label, unsigned color){
 
 //Adds a simple node
 void TreeFile::newNode(unsigned label){
-    file<<"\t"<<currentId<<currentNode<<"[label="<<label<<", shape=circle]"<<endl;
+    file<<"\t"<<currentId<<currentNode<<"[label="<<label<<", shape=circle]"<<'\n';
 
     currentNode++;
 }
 
 //Adds an edge between two nodes in the active tree
 void TreeFile::addEdge(edge connection){
-    file<<"\t"<<currentId<<connection.first<<" -- "<<currentId<<connection.second<<endl;
+    file<<"\t"<<currentId<<connection.first<<" -- "<<currentId<<connection.second<<'\n';
 }
 
 //Adds the file ending and closes the file
 void TreeFile::close(){
-    file<<"}"<<endl;
+    file<<"}"<<'\n';
     file.close();
 }
 

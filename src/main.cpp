@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     } catch (string message){
 
         //if there was a mistake, inform the user and exit
-        cout<<message<<endl<<endl;
+        cout<<message<<'\n'<<'\n';
         printHelp();
         return 1;
     }
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	TreeMaker tree(&arrangements, runtimeArgs.n, true);
 
     //if specified, print the arrangements table
-	if(runtimeArgs.verbose) cout<<arrangements<<endl;
+	if(runtimeArgs.verbose) cout<<arrangements<<'\n';
 
     //output
 	arrangements.printStats();
