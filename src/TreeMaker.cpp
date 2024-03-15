@@ -1,5 +1,7 @@
 #include "TreeMaker.hpp"
 
+using namespace std;
+
 //constructor for the class
 TreeMaker::TreeMaker(ArrangementsTable *arr, unsigned nodes, bool hi){
 
@@ -22,18 +24,21 @@ void TreeMaker::createArrangement(){
     pair<edgeList,seed>* currentArrangement;
     unsigned seedLength;
     bool valid = true;
-    unsigned cont;
 
     //build the first tree, if there's a seed for it (a single branch node)
     if (seeds.size() > 0){
         (*arrangements)[n].resize(1);
         currentArrangement = &(*arrangements)[n].back();
 
+        (*currentArrangement).second.resize(n);
+        (*currentArrangement).second[0] = n - 1;
+
         for(unsigned long i = 1; i < n; i++){
             //relate all nodes to node 0
             (*currentArrangement).first.push_back(edge(0, i));
+            (*currentArrangement).second[i] = 1;
         }
-        (*currentArrangement).second = seeds[0];
+        
     }
 
     //for every generated seed, excluding the first one
@@ -52,73 +57,112 @@ void TreeMaker::createArrangement(){
         //(*arrangements)[seedLength][j] is our arrangement
         for(unsigned long j = 0; j < (*arrangements)[seedLength].size(); j++){
 
+            //register if the base arrangement is linear
+            bool isLinear = (seedLength == 2 || ((*arrangements)[seedLength][j].second.size() % 2 == 0 && (*arrangements)[seedLength][j].second[0] == 2));
+
             //clear the clusters list, since only trees that come from the same
             //branch node arrangement can be identical
-            usedLeafNodeClusters.clear();
+            usedLeafNodeCounts.clear();
 
             //for every possible way to assign our branch nodes into the arrangement
             do {
 
+                if(isLinear){
+                    //std::prev_permutation(seeds[i].begin(),seeds[i].end());
+                }
+
                 valid = true; //the branch node arrangement is valid by default
+                vector<unsigned> leafNodeCount = seeds[i];
 
                 //if any of the branch nodes already has exceded its edge count, it isn't valid
-                for(unsigned k = 0; k < (*arrangements)[seedLength][j].second.size(); k++){
-                    if (seeds[i][k] < (*arrangements)[seedLength][j].second[k]){
+                for(unsigned k = 0; k < leafNodeCount.size(); k++){
+                    if (leafNodeCount[k] < (*arrangements)[seedLength][j].second[k]){
                         valid = false;
                         break;
+                    } else {
+                        leafNodeCount[k] -= (*arrangements)[seedLength][j].second[k];
                     }
                 }
 
                 //if not valid, continue to the next positions of our branch nodes
                 if (!valid) continue;
 
-                //make an adjacency list from the edges of our branch node arrangement
-                adjList.clear();
-                adjList.resize(n);
+                for(int k = seedLength - 2; k >= 0; k--){
+                    
+                    edge e = (*arrangements)[seedLength][j].first[k];
 
-                for(edge k : (*arrangements)[seedLength][j].first){
-                    adjList[k.first].push_back(k.second);
-                    adjList[k.second].push_back(k.first);
+                    //Since trees are built inside-out, we know that edges go as [closer to node 0 node, further away node]
+                    leafNodeCount[e.first] += leafNodeCount[e.second];
                 }
 
-                //complete the adjacency list by completing the edge count of every branch node
-                cont = 0;
-                for(unsigned k = seedLength; k < n; k++){
+                vector<unsigned> depth(seedLength,0);
+                for(int k = 0; k < seedLength - 1; k++){
+                    edge e = (*arrangements)[seedLength][j].first[k];
 
-                    if (seeds[i][cont] == adjList[cont].size()){
-                        cont++;
-                        k--;
-                        continue;
-                    }
-
-                    adjList[cont].push_back(k);
-                    adjList[k].push_back(cont);
+                    //Calculate depth (distance from node 0) for all nodes in the arrangement
+                    depth[e.second] = depth[e.first] + 1;
+                    //or(int p: depth) cout<<p<<". "; cout<<endl;
                 }
 
-                //verify if the generated tree is unique
-                if(isUnique(adjList, (*arrangements)[seedLength][j].second)){
-
-                    //if it is, add it to the arrangements table
-
-                    //create a row in the arr table
-                    (*arrangements)[n].resize((*arrangements)[n].size() + 1);
-                    currentArrangement = &(*arrangements)[n].back();
-
-                    //add every edge into the row (ascending only to ignore duplicates)
-                    for (unsigned k = 0; k < seedLength; k++){
-                        for(unsigned l = 0; l < adjList[k].size(); l++){
-                            if (adjList[k][l] > k){
-                                (*currentArrangement).first.push_back(edge(k, adjList[k][l]));
-                            }
-                        }
+                int first = 1;
+                for(unsigned k = 2; k < seedLength; k++){
+                    if(depth[first] != depth[k]){
+                        std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + k);
+                        first = k;
                     }
+                }
+                std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + seedLength);
 
-                    //add the seed to the row
-                    (*currentArrangement).second = seeds[i];
+                //Have we already used an identical tree?
+                if(usedLeafNodeCounts.find(leafNodeCount) == usedLeafNodeCounts.end()){
+                    usedLeafNodeCounts.insert(leafNodeCount);
+
+                    cout<<"-"<<endl;
+                    for(int p: seeds[i]) cout<<p<<","; cout<<endl;
+                    for(int p: depth) cout<<p<<","; cout<<endl;
+                    for(int p: leafNodeCount) cout<<p<<","; cout<<endl;
+
+                    addTree(seeds[i], (*arrangements)[seedLength][j].first);
+                } else {
+                    cout<<"-Rechazado"<<endl;
+                    for(int p: seeds[i]) cout<<p<<","; cout<<endl;
+                    for(int p: depth) cout<<p<<","; cout<<endl;
+                    for(int p: leafNodeCount) cout<<p<<","; cout<<endl;
                 }
 
             } while ( std::prev_permutation(seeds[i].begin(),seeds[i].end()));
         }
+    }
+}
+
+void TreeMaker::addTree(seed s, edgeList initialEdges){
+    (*arrangements)[n].resize((*arrangements)[n].size() + 1);
+    
+    unsigned initialEdge = 0;
+    unsigned lastNodeUsed = s.size();
+
+    seed pending = s;
+
+    //for every origin node
+    for(int i = 0; i < s.size(); i++){
+
+        while(initialEdge < initialEdges.size() && initialEdges[initialEdge].first == i){
+            (*arrangements)[n].back().first.push_back(initialEdges[initialEdge]);
+            pending[i]--;
+            pending[initialEdges[initialEdge].second]--;
+            initialEdge++;
+        }
+
+        while(pending[i] >= 1){
+            (*arrangements)[n].back().first.push_back(edge(i,lastNodeUsed));
+            lastNodeUsed++;
+            pending[i]--;
+        }
+    }
+
+    (*arrangements)[n].back().second = s;
+    while((*arrangements)[n].back().second.size() < n){
+        (*arrangements)[n].back().second.push_back(1);
     }
 }
 
@@ -173,55 +217,4 @@ void TreeMaker::decompose(unsigned remaining, unsigned max){
 
     //delete the half-constructed seed
     seeds.erase(seeds.begin() + parentPos);
-}
-
-//returns if a tree is unique or has already been generated
-bool TreeMaker::isUnique(vector<vector<unsigned>> &adjList, seed arr){
-    leafNodeClusters.clear();
-
-    //measure the leaf node clusters of a tree. Stores them into leafNodeClusters
-    measureLeafNodeClusters(adjList,0, -1, 0);
-
-    //if the used clusters contains a cluster identical to our current tree's,
-    //the tree is a duplicate
-    if (usedLeafNodeClusters.find(leafNodeClusters) != usedLeafNodeClusters.end()) return false;
-
-    //add our tree clusters to the cluster list
-    usedLeafNodeClusters.insert(leafNodeClusters);
-
-    //if we have a linear branch node arrangement, count the clusters from node 1 too, so we don't get
-    //two mirrored trees (which are duplicates)
-    if(arr.size() == 0 || (arr.size() % 2 == 0 && arr.front() == 2 && arr.back() == 2)){
-
-        leafNodeClusters.clear();
-        measureLeafNodeClusters(adjList, 1, -1, 0);
-        usedLeafNodeClusters.insert(leafNodeClusters);
-    }
-
-    //the tree is unique
-    return true;
-}
-
-//recursive function to count group of leaf nodes that descend from the same branch node
-void TreeMaker::measureLeafNodeClusters(vector<vector<unsigned int>> &adjList, unsigned node, int parent, unsigned level){
-
-    int cont = 0; //variable to count the leaf nodes that descend from the current node
-
-    //for every neighbouring node
-    for(int neighbour: adjList[node]){
-
-        //excluding the node where we came from
-        if(neighbour != parent){
-
-            //if the node is a leaf, increase the count
-            if(adjList[neighbour].size() == 1){
-                cont++;
-            } else { //otherwise, repeat the same process for it
-                measureLeafNodeClusters(adjList, neighbour, node, level + 1);
-            }
-        }
-    }
-
-    //if this node had any leafs, note them in the clusters list
-    if (cont > 0) leafNodeClusters.insert(leafNodeCluster(level, cont));
 }

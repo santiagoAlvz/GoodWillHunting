@@ -15,7 +15,7 @@
 using std::vector;
 using std::make_pair;
 using std::pair;
-using std::multiset;
+using std::set;
 
 class TreeMaker{
 	protected:
@@ -26,13 +26,14 @@ class TreeMaker{
 		vector<seed> seeds; //generated seeds for n
 
 		//used for validation of unique trees
-		multiset<multiset<leafNodeCluster>> usedLeafNodeClusters; //leafNodeClusters used for a given seed and
-															      //branch node arrangement
-		multiset<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
+		set<vector<unsigned>> usedLeafNodeCounts; //leafNodeClusters used for a given seed and
+													//branch node arrangement
+		//multiset<leafNodeCluster> leafNodeClusters; //leafNodeClusters of a given tree
 
 	public:
 		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
+		void addTree(seed, edgeList);
 		void decompose();
 		void decompose(unsigned, unsigned);
 		bool isUnique(vector<vector<unsigned>>&, seed);

@@ -12,6 +12,9 @@ ArrangementsTable::ArrangementsTable(unsigned n){
 
     (*this)[2].resize(1);
     (*this)[2][0].first.push_back(edge(0,1));
+    (*this)[2][0].second.resize(2);
+    (*this)[2][0].second[0] = 1;
+    (*this)[2][0].second[1] = 1;
 }
 
 //outputs the arrangement table as a graphviz file
