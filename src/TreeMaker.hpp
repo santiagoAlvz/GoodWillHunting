@@ -33,6 +33,7 @@ class TreeMaker{
 	public:
 		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
+		bool validateTree(pair<edgeList,seed>, seed, bool);
 		void addTree(seed, edgeList);
 		void decompose();
 		void decompose(unsigned, unsigned);

@@ -67,72 +67,70 @@ void TreeMaker::createArrangement(){
             //for every possible way to assign our branch nodes into the arrangement
             do {
 
-                if(isLinear){
-                    //std::prev_permutation(seeds[i].begin(),seeds[i].end());
-                }
-
-                valid = true; //the branch node arrangement is valid by default
-                vector<unsigned> leafNodeCount = seeds[i];
-
-                //if any of the branch nodes already has exceded its edge count, it isn't valid
-                for(unsigned k = 0; k < leafNodeCount.size(); k++){
-                    if (leafNodeCount[k] < (*arrangements)[seedLength][j].second[k]){
-                        valid = false;
-                        break;
-                    } else {
-                        leafNodeCount[k] -= (*arrangements)[seedLength][j].second[k];
-                    }
-                }
-
-                //if not valid, continue to the next positions of our branch nodes
-                if (!valid) continue;
-
-                for(int k = seedLength - 2; k >= 0; k--){
-                    
-                    edge e = (*arrangements)[seedLength][j].first[k];
-
-                    //Since trees are built inside-out, we know that edges go as [closer to node 0 node, further away node]
-                    leafNodeCount[e.first] += leafNodeCount[e.second];
-                }
-
-                vector<unsigned> depth(seedLength,0);
-                for(int k = 0; k < seedLength - 1; k++){
-                    edge e = (*arrangements)[seedLength][j].first[k];
-
-                    //Calculate depth (distance from node 0) for all nodes in the arrangement
-                    depth[e.second] = depth[e.first] + 1;
-                    //or(int p: depth) cout<<p<<". "; cout<<endl;
-                }
-
-                int first = 1;
-                for(unsigned k = 2; k < seedLength; k++){
-                    if(depth[first] != depth[k]){
-                        std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + k);
-                        first = k;
-                    }
-                }
-                std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + seedLength);
-
                 //Have we already used an identical tree?
-                if(usedLeafNodeCounts.find(leafNodeCount) == usedLeafNodeCounts.end()){
-                    usedLeafNodeCounts.insert(leafNodeCount);
-
-                    cout<<"-"<<endl;
-                    for(int p: seeds[i]) cout<<p<<","; cout<<endl;
-                    for(int p: depth) cout<<p<<","; cout<<endl;
-                    for(int p: leafNodeCount) cout<<p<<","; cout<<endl;
-
+                if(validateTree((*arrangements)[seedLength][j], seeds[i], true)){
                     addTree(seeds[i], (*arrangements)[seedLength][j].first);
-                } else {
-                    cout<<"-Rechazado"<<endl;
-                    for(int p: seeds[i]) cout<<p<<","; cout<<endl;
-                    for(int p: depth) cout<<p<<","; cout<<endl;
-                    for(int p: leafNodeCount) cout<<p<<","; cout<<endl;
                 }
 
             } while ( std::prev_permutation(seeds[i].begin(),seeds[i].end()));
         }
     }
+}
+
+bool TreeMaker::validateTree(pair<edgeList,seed> arrangement, seed s, bool checkForLinear = true){
+    unsigned branchNodes = s.size();
+
+    vector<unsigned> depth(branchNodes,0);
+    for(edge e: arrangement.first){
+
+        //Calculate depth (distance from node 0) for all nodes in the arrangement
+        depth[e.second] = depth[e.first] + 1;
+    }
+
+    vector<unsigned> leafNodeCount = s;
+
+    //if any of the branch nodes already has exceded its edge count, it isn't valid
+    for(unsigned k = 0; k < leafNodeCount.size(); k++){
+        if (leafNodeCount[k] < arrangement.second[k]){
+            return false;
+        } else {
+            leafNodeCount[k] -= arrangement.second[k];
+        }
+    }
+
+    for(int k = branchNodes - 2; k >= 0; k--){
+        
+        edge e = arrangement.first[k];
+
+        //Since trees are built inside-out, we know that edges go as [closer to node 0 node, further away node]
+        leafNodeCount[e.first] += leafNodeCount[e.second];
+    }
+
+    int first = 1;
+    for(unsigned k = 2; k < branchNodes; k++){
+        if(depth[first] != depth[k]){
+            std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + k);
+
+            first = k;
+        }
+    }
+    std::sort(leafNodeCount.begin() + first, leafNodeCount.begin() + branchNodes);
+
+    if (usedLeafNodeCounts.find(leafNodeCount) == usedLeafNodeCounts.end()){
+        usedLeafNodeCounts.insert(leafNodeCount);
+
+        if(checkForLinear && (branchNodes == 2 || arrangement.second.size() % 2 == 0 && arrangement.second[0] == 2)){
+            for(int i = 0; i < branchNodes; i += 2){
+                std::swap(s[i], s[i+1]);
+            }
+
+            validateTree(arrangement, s, false);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 void TreeMaker::addTree(seed s, edgeList initialEdges){
