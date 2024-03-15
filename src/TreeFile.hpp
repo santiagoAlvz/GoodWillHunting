@@ -24,7 +24,7 @@ class TreeFile {
 		void makeCurrentId();
 	public:
 		TreeFile(string, bool);
-		void newTree();
+		void newTree(seed);
 		void newNode(unsigned, unsigned);
 		void newNode(unsigned);
 		void addEdge(edge);

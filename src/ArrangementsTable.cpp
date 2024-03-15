@@ -20,7 +20,8 @@ void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
 
     //if n = 1, output a single tree with a single node (special case)
     if(n == 1) {
-        file.newTree();
+        seed s;
+        file.newTree(s);
         file.newNode(0);
     }
     
@@ -30,7 +31,7 @@ void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
     for(unsigned long i = 0; i < (*this)[n].size(); i++){
 
         //Create the tree
-        file.newTree();
+        file.newTree((*this)[n][i].second);
 
         //Add the tree's nodes,
         j = 0;

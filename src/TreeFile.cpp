@@ -18,12 +18,16 @@ TreeFile::TreeFile(string filename, bool dm){
 }
 
 //Creates a new tree, and turns it into the current tree
-void TreeFile::newTree(){
+void TreeFile::newTree(seed s){
     makeCurrentId(); //update id to be used for the new tree
 
     currentNode = 0;
 
-    file<<"\t//Tree with id "<<currentId<<'\n';
+    file<<"\t//Tree with id "<<currentId<<" and seed [";
+    for(int i: s){
+      file<<i<<',';
+    }
+    file<<"]\n";
 
     //Increase the number of trees used so far
     treeNumber++;

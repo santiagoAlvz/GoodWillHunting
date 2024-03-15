@@ -18,7 +18,7 @@ typedef std::vector<unsigned> seed;
 
 //a leaf node cluster is a group of leaf nodes that are connected to the same
 // branch node. This pair contains how many nodes are between the leaf nodes and
-// the "core" node, and the amount of nodes of the cluster
+// the 0th node, and the amount of nodes of the cluster
 typedef std::pair<unsigned, unsigned> leafNodeCluster;
 
 #endif
