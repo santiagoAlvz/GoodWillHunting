@@ -11,10 +11,10 @@ ArrangementsTable::ArrangementsTable(unsigned n){
     if(n < 2) return;
 
     (*this)[2].resize(1);
-    (*this)[2][0].first.push_back(edge(0,1));
-    (*this)[2][0].second.resize(2);
-    (*this)[2][0].second[0] = 1;
-    (*this)[2][0].second[1] = 1;
+    (*this)[2][0].edges.push_back(edge(0,1));
+    (*this)[2][0].seed.resize(2);
+    (*this)[2][0].seed[0] = 1;
+    (*this)[2][0].seed[1] = 1;
 }
 
 //outputs the arrangement table as a graphviz file
@@ -23,7 +23,7 @@ void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
 
     //if n = 1, output a single tree with a single node (special case)
     if(n == 1) {
-        seed s;
+        treeSeed s;
         file.newTree(s);
         file.newNode(0);
     }
@@ -34,14 +34,14 @@ void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
     for(unsigned long i = 0; i < (*this)[n].size(); i++){
 
         //Create the tree
-        file.newTree((*this)[n][i].second);
+        file.newTree((*this)[n][i].seed);
 
         //Add the tree's nodes,
         j = 0;
 
         //add branch nodes
-        while(j < (*this)[n][i].second.size()){
-            file.newNode((*this)[n][i].second[j], (*this)[n][i].second[j]);
+        while(j < (*this)[n][i].seed.size()){
+            file.newNode((*this)[n][i].seed[j], (*this)[n][i].seed[j]);
             j++;
         }
 
@@ -52,9 +52,9 @@ void ArrangementsTable::printToFile(string filename, unsigned n, bool dm){
         }
 
         //Add all edges of the arrangement
-        for(unsigned long j = 0; j < (*this)[n][i].first.size(); j++){
+        for(unsigned long j = 0; j < (*this)[n][i].seed.size(); j++){
             //add them into the file
-            file.addEdge((*this)[n][i].first[j]);
+            file.addEdge((*this)[n][i].edges[j]);
         }
     }
 

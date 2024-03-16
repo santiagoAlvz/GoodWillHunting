@@ -14,7 +14,7 @@ typedef std::pair<unsigned, unsigned> edge;
 typedef std::vector<edge> edgeList;
 
 //a seed is the list of all non-leaf edge counts for a given tree
-typedef std::vector<unsigned> seed;
+typedef std::vector<unsigned> treeSeed;
 
 //a leaf node cluster is a group of leaf nodes that are connected to the same
 // branch node. This pair contains how many nodes are between the leaf nodes and

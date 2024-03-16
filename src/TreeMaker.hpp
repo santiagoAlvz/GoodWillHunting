@@ -23,7 +23,7 @@ class TreeMaker{
 		unsigned minSeedValue; //minimum edge count that a branch node may have. Defines if a tree is
 							   //irreducible or not
 		unsigned n; //number of nodes
-		vector<seed> seeds; //generated seeds for n
+		vector<treeSeed> seeds; //generated seeds for n
 
 		//used for validation of unique trees
 		set<vector<unsigned>> usedLeafNodeCounts; //leafNodeClusters used for a given seed and
@@ -33,11 +33,11 @@ class TreeMaker{
 	public:
 		TreeMaker(ArrangementsTable *, unsigned, bool);
 		void createArrangement();
-		bool validateTree(pair<edgeList,seed>, seed, bool);
-		void addTree(seed, edgeList);
+		bool validateTree(Tree, treeSeed, bool);
+		void addTree(treeSeed, edgeList);
 		void decompose();
 		void decompose(unsigned, unsigned);
-		bool isUnique(vector<vector<unsigned>>&, seed);
+		bool isUnique(vector<vector<unsigned>>&, treeSeed);
 		void measureLeafNodeClusters(vector<vector<unsigned int>> &, unsigned, int, unsigned);
 };
 

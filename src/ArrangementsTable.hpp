@@ -9,6 +9,7 @@
 #include <vector>
 #include <utility>
 #include "TreeFile.hpp"
+#include "Tree.hpp"
 #include "definitions.hpp"
 
 using std::endl;
@@ -16,7 +17,7 @@ using std::vector;
 using std::string;
 using std::pair;
 
-class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
+class ArrangementsTable: public vector<vector<Tree>>{
 	private:
 		unsigned n = 0; //initial n value
 	public:
@@ -35,13 +36,13 @@ class ArrangementsTable: public vector<vector<pair<edgeList,seed>>>{
 		    	//For each arrangement with i size
 		        os<<"\t";
 
-		        for(edge e: arr[i][j].first){
+		        for(edge e: arr[i][j].edges){
 		        	//for each edge in the arrangements list
 		            os<<"["<<e.first<<","<<e.second<<"] ";
 		        }
 		        os<<"\t[";
 
-		        for(unsigned u: arr[i][j].second){
+		        for(unsigned u: arr[i][j].seed){
 		        	//for each number in the seed
 		        	os<<u<<",";
 		        }

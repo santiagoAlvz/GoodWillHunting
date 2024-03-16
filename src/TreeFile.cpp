@@ -18,7 +18,7 @@ TreeFile::TreeFile(string filename, bool dm){
 }
 
 //Creates a new tree, and turns it into the current tree
-void TreeFile::newTree(seed s){
+void TreeFile::newTree(treeSeed s){
     makeCurrentId(); //update id to be used for the new tree
 
     currentNode = 0;

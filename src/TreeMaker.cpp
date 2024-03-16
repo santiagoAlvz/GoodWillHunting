@@ -21,22 +21,21 @@ void TreeMaker::createArrangement(){
     decompose();
 
     vector<vector<unsigned>> adjList(n);
-    pair<edgeList,seed>* currentArrangement;
+    Tree* currentArrangement;
     unsigned seedLength;
-    bool valid = true;
 
     //build the first tree, if there's a seed for it (a single branch node)
     if (seeds.size() > 0){
         (*arrangements)[n].resize(1);
         currentArrangement = &(*arrangements)[n].back();
 
-        (*currentArrangement).second.resize(n);
-        (*currentArrangement).second[0] = n - 1;
+        (*currentArrangement).seed.resize(n);
+        (*currentArrangement).seed[0] = n - 1;
 
         for(unsigned long i = 1; i < n; i++){
             //relate all nodes to node 0
-            (*currentArrangement).first.push_back(edge(0, i));
-            (*currentArrangement).second[i] = 1;
+            (*currentArrangement).edges.push_back(edge(0, i));
+            (*currentArrangement).seed[i] = 1;
         }
         
     }
@@ -57,9 +56,6 @@ void TreeMaker::createArrangement(){
         //(*arrangements)[seedLength][j] is our arrangement
         for(unsigned long j = 0; j < (*arrangements)[seedLength].size(); j++){
 
-            //register if the base arrangement is linear
-            bool isLinear = (seedLength == 2 || ((*arrangements)[seedLength][j].second.size() % 2 == 0 && (*arrangements)[seedLength][j].second[0] == 2));
-
             //clear the clusters list, since only trees that come from the same
             //branch node arrangement can be identical
             usedLeafNodeCounts.clear();
@@ -69,7 +65,7 @@ void TreeMaker::createArrangement(){
 
                 //Have we already used an identical tree?
                 if(validateTree((*arrangements)[seedLength][j], seeds[i], true)){
-                    addTree(seeds[i], (*arrangements)[seedLength][j].first);
+                    addTree(seeds[i], (*arrangements)[seedLength][j].edges);
                 }
 
             } while ( std::prev_permutation(seeds[i].begin(),seeds[i].end()));
@@ -77,11 +73,11 @@ void TreeMaker::createArrangement(){
     }
 }
 
-bool TreeMaker::validateTree(pair<edgeList,seed> arrangement, seed s, bool checkForLinear = true){
+bool TreeMaker::validateTree(Tree arrangement, treeSeed s, bool checkForLinear = true){
     unsigned branchNodes = s.size();
 
     vector<unsigned> depth(branchNodes,0);
-    for(edge e: arrangement.first){
+    for(edge e: arrangement.edges){
 
         //Calculate depth (distance from node 0) for all nodes in the arrangement
         depth[e.second] = depth[e.first] + 1;
@@ -91,16 +87,16 @@ bool TreeMaker::validateTree(pair<edgeList,seed> arrangement, seed s, bool check
 
     //if any of the branch nodes already has exceded its edge count, it isn't valid
     for(unsigned k = 0; k < leafNodeCount.size(); k++){
-        if (leafNodeCount[k] < arrangement.second[k]){
+        if (leafNodeCount[k] < arrangement.seed[k]){
             return false;
         } else {
-            leafNodeCount[k] -= arrangement.second[k];
+            leafNodeCount[k] -= arrangement.seed[k];
         }
     }
 
     for(int k = branchNodes - 2; k >= 0; k--){
         
-        edge e = arrangement.first[k];
+        edge e = arrangement.edges[k];
 
         //Since trees are built inside-out, we know that edges go as [closer to node 0 node, further away node]
         leafNodeCount[e.first] += leafNodeCount[e.second];
@@ -119,7 +115,7 @@ bool TreeMaker::validateTree(pair<edgeList,seed> arrangement, seed s, bool check
     if (usedLeafNodeCounts.find(leafNodeCount) == usedLeafNodeCounts.end()){
         usedLeafNodeCounts.insert(leafNodeCount);
 
-        if(checkForLinear && (branchNodes == 2 || arrangement.second.size() % 2 == 0 && arrangement.second[0] == 2)){
+        if(checkForLinear && (branchNodes == 2 || arrangement.seed.size() % 2 == 0 && arrangement.seed[0] == 2)){
             for(int i = 0; i < branchNodes; i += 2){
                 std::swap(s[i], s[i+1]);
             }
@@ -133,34 +129,34 @@ bool TreeMaker::validateTree(pair<edgeList,seed> arrangement, seed s, bool check
     return false;
 }
 
-void TreeMaker::addTree(seed s, edgeList initialEdges){
+void TreeMaker::addTree(treeSeed s, edgeList initialEdges){
     (*arrangements)[n].resize((*arrangements)[n].size() + 1);
     
     unsigned initialEdge = 0;
     unsigned lastNodeUsed = s.size();
 
-    seed pending = s;
+    treeSeed pending = s;
 
     //for every origin node
     for(int i = 0; i < s.size(); i++){
 
         while(initialEdge < initialEdges.size() && initialEdges[initialEdge].first == i){
-            (*arrangements)[n].back().first.push_back(initialEdges[initialEdge]);
+            (*arrangements)[n].back().edges.push_back(initialEdges[initialEdge]);
             pending[i]--;
             pending[initialEdges[initialEdge].second]--;
             initialEdge++;
         }
 
         while(pending[i] >= 1){
-            (*arrangements)[n].back().first.push_back(edge(i,lastNodeUsed));
+            (*arrangements)[n].back().edges.push_back(edge(i,lastNodeUsed));
             lastNodeUsed++;
             pending[i]--;
         }
     }
 
-    (*arrangements)[n].back().second = s;
-    while((*arrangements)[n].back().second.size() < n){
-        (*arrangements)[n].back().second.push_back(1);
+    (*arrangements)[n].back().seed = s;
+    while((*arrangements)[n].back().seed.size() < n){
+        (*arrangements)[n].back().seed.push_back(1);
     }
 }
 
